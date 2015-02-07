@@ -18,7 +18,7 @@ public class JsonMessage {
 	public String file;
 	public int messageType;
 	public String text;
-	
+
 	public static JsonMessage parse(String res)  {
 		JsonMessage data = new JsonMessage();
 		Gson gson = new Gson();

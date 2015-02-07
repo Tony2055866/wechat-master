@@ -22,6 +22,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+
 import bean.StrangerEntity;
 import bean.Update;
 import bean.UserDetail;
@@ -55,6 +57,7 @@ public class ApiClent {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 				try {
+                    Log.i("tong","login response:" + new String(responseBody));
 					UserEntity user = UserEntity.parse(new String(responseBody));
 					callback.onSuccess(user);
 				} catch (IOException e) {
