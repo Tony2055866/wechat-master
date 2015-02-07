@@ -1,0 +1,7 @@
+D:\Android\code\code\wechat-master\app\build\intermediates\classes\debug
+D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\basehttplibrary-0625e6f2750b43667fa33f14f2dfc9946499b21d.jar
+D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\crashlytics-4b3782a35061d4381882ee3a115bbdecddfa918d.jar
+D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\SMSSDK_fat-1e0c1714d83692117ea40b27a0aaa95769349cac.jar
+D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\libGoogleAnalyticsServices-25097f04664214482526f4b34e98a07297ea1438.jar
+D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\asmack-android-8-0.8.10-6003a002a5df76d141bbd68fdfe694ff15685e0a.jar
+D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\base-62f2d808e5a7510c29c250cb8aa9b4463886d9c1.jar

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\Android\code\code\wechat-master\app\libs\crashlytics.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b8189e9eef2f07fae743e05d7fe7e69daebe98d1">
+        <dex dex="D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\crashlytics-4b3782a35061d4381882ee3a115bbdecddfa918d.jar" />
+    </item>
+    <item
+        jar="D:\Android\code\code\wechat-master\app\libs\asmack-android-8-0.8.10.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="8ffad10173ab28a17db77cf10c9a9fc95037305b">
+        <dex dex="D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\asmack-android-8-0.8.10-6003a002a5df76d141bbd68fdfe694ff15685e0a.jar" />
+    </item>
+    <item
+        jar="D:\Android\code\code\wechat-master\app\libs\libGoogleAnalyticsServices.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e887c6c9b31b39a39b0eaba981448b78902ea813">
+        <dex dex="D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\libGoogleAnalyticsServices-25097f04664214482526f4b34e98a07297ea1438.jar" />
+    </item>
+    <item
+        jar="D:\Android\code\code\wechat-master\app\libs\SMSSDK_fat.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="bc9cc46ff3637f3a94a1c62359c31cc4e7aaa948">
+        <dex dex="D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\SMSSDK_fat-1e0c1714d83692117ea40b27a0aaa95769349cac.jar" />
+    </item>
+    <item
+        jar="D:\Android\code\code\wechat-master\app\libs\basehttplibrary.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="767c90f120f0fe6d24d5c55ea591684918b40ad0">
+        <dex dex="D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\basehttplibrary-0625e6f2750b43667fa33f14f2dfc9946499b21d.jar" />
+    </item>
+    <item
+        jar="D:\Android\code\code\wechat-master\app\libs\base.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="fe44880fc65d42d42f5469035c9d9ce4b0413e15">
+        <dex dex="D:\Android\code\code\wechat-master\app\build\intermediates\pre-dexed\debug\base-62f2d808e5a7510c29c250cb8aa9b4463886d9c1.jar" />
+    </item>
+
+</items>

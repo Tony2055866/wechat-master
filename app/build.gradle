@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.donal.wechat"
+        minSdkVersion 8
+        targetSdkVersion 8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile files('libs/asmack-android-8-0.8.10.jar')
+    compile files('libs/base.jar')
+    compile files('libs/basehttplibrary.jar')
+    compile files('libs/crashlytics.jar')
+    compile files('libs/libGoogleAnalyticsServices.jar')
+    compile files('libs/SMSSDK_fat.jar')
+}
