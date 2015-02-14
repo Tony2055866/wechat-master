@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -149,17 +150,17 @@ public class WeChat extends AWechatActivity {
 			public void run() {
 				Message msg = new Message();
 				try {
-					String password = appContext.getLoginPassword();
+					String password = appContext.getLoginInfo().userInfo.password;
 					String userId = appContext.getLoginUid();
 					XMPPConnection connection = XmppConnectionManager.getInstance()
 							.getConnection();
 					connection.connect();
-					connection.login(userId, password, "android"); 
+					connection.login(userId, password); //, "android"
 					connection.sendPacket(new Presence(Presence.Type.available));
-					Logger.i("XMPPClient Logged in as " +connection.getUser());
+					Log.i("tong test","XMPPClient Logged in as: " + connection.getUser() + " password:" + password);
 					msg.what = 1;
-					
 				} catch (Exception xee) {
+                    Log.e("tong test","connect2xmpp error!",  xee);
 					if (xee instanceof XMPPException) {
 						XMPPException xe = (XMPPException) xee;
 						final XMPPError error = xe.getXMPPError();

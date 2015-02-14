@@ -147,8 +147,7 @@ public class Login extends AppActivity{
 					UserEntity user = (UserEntity) data;
 					if (user.status == 1) {
 						appContext.saveLoginInfo(user);
-						appContext.saveLoginPassword(password);
-						saveLoginConfig(appContext.getLoginInfo());
+						//saveLoginConfig(appContext.getLoginInfo(), cheb);
 						Intent intent = new Intent(Login.this, Tabbar.class);
 						startActivity(intent);
 						AppManager.getAppManager().finishActivity(Login.this);

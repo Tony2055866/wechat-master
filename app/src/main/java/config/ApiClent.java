@@ -74,6 +74,65 @@ public class ApiClent {
 			}
 		});
 	}
+
+    public static void loginV2(WCApplication appContext, String account, String password, final ClientCallback callback) {
+        RequestParams params = new RequestParams();
+        params.add("uname", account);
+        params.add("uPass", password);
+        params.add("versionInfo", " ");
+        params.add("deviceInfo", " ");
+        QYRestClient.post("v2/login.action", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Log.i("tong","login response:" + new String(responseBody));
+                    UserEntity user = UserEntity.parse(new String(responseBody));
+                    callback.onSuccess(user);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (AppException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  byte[] responseBody, Throwable error) {
+                callback.onFailure(message_error);
+            }
+        });
+    }
+
+    public static void registerV2(WCApplication appContext, String email, String password, String name, String mLang, String lLang, final ClientCallback callback) {
+        RequestParams params = new RequestParams();
+        params.add("email", email);
+        params.add("uPass", password);
+        params.add("name", name);
+        params.add("mLang", mLang);
+        params.add("lLang", lLang);
+        QYRestClient.post("v2/register.action", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    bean.Entity data = new bean.Entity() {
+                    };
+                    JSONObject json = new JSONObject(new String(responseBody));
+                    data.setError_code(json.getInt("status"));
+                    data.setMessage(json.getString("msg"));
+                    callback.onSuccess(data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    callback.onError(e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  byte[] responseBody, Throwable error) {
+                callback.onFailure(message_error);
+            }
+        });
+    }
 	
 	public static void register(WCApplication appContext, String mobile, String password, String nickname, String intro, String avatar, final ClientCallback callback) {
 		RequestParams params = new RequestParams();

@@ -17,19 +17,22 @@ import com.google.gson.Gson;
  *
  */
 public class UserInfo implements Serializable {
-	public String userId;
-	public String nickName;
+    public String userId;
+    public String email;
 	public String description;
-	public String registerDate;
+	public String lLang;
+	public String mLang;
 	public String userHead;
-	
+	public String nickName;
+    public String password;
+    
 	/**
 	 * @param string
 	 * @return
 	 * @throws AppException 
 	 */
 	public static UserInfo parse(String string) throws AppException {
-		UserInfo data = new UserInfo();
+		UserInfo data = null;
 		try {
 			Gson gson = new Gson();
 			data = gson.fromJson(string, UserInfo.class);
@@ -39,4 +42,18 @@ public class UserInfo implements Serializable {
 		}
 		return data;
 	}
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
+                ", description='" + description + '\'' +
+                ", lLang='" + lLang + '\'' +
+                ", mLang='" + mLang + '\'' +
+                ", userHead='" + userHead + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

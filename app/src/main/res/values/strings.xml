@@ -1,13 +1,16 @@
 <resources>
 
-    <string name="account">输入用户名或密码</string>
+    <string name="account">输入您的注册邮箱</string>
     <string name="password">输入密码</string>
     <string name="auto_save_password">记住密码</string>
     <string name="register2">注册新帐号</string>
     <string name="password_not_empty">密码不能为空</string>
     <string name="login_success">登录成功</string>
     <string name="sc_login_failed">登录失败</string>
-    
+    <string name="qr_register">FF注册</string>
+    <string name="register_tip">提示 \n带*项为必填项\n填写邮箱方便您找回密码以及了解更多FF信息</string>
+
+
     <string name="app_name">FF</string>
 
     <string name="main_wechat">会话</string>

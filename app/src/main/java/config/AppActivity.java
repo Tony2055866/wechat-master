@@ -224,10 +224,15 @@ public class AppActivity extends BaseActivity implements AppActivitySupport{
 		return preferences;
 	}
 	
-	public void saveLoginConfig(UserEntity loginConfig) {
-		preferences.edit().putString(CommonValue.USERID, loginConfig.userInfo.userId).commit();
-		preferences.edit().putString(CommonValue.APIKEY, loginConfig.apiKey).commit();
-	}
+	public void saveLoginConfig(UserEntity loginConfig, boolean autoLogin) {
+        SharedPreferences.Editor  editor = preferences.edit();
+        editor.putString(CommonValue.USERID, loginConfig.userInfo.userId);
+        editor.putString(CommonValue.APIKEY, loginConfig.apiKey);
+        editor.putString("email", loginConfig.userInfo.email);
+        editor.putString("password", loginConfig.userInfo.password);
+        editor.putBoolean("autoLogin", autoLogin);
+        editor.commit();
+    }
 	
 	public UserEntity getLoginConfig() {
 		UserEntity user = new UserEntity();

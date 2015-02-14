@@ -55,7 +55,7 @@
            android:layout_marginLeft="5dp"
            android:layout_below="@id/textview_name_l"
            android:layout_toRightOf="@id/image_portrait_l"
-           android:background="@drawable/incoming"
+           android:background="@drawable/incoming_b"
             >
             <ImageView
 		       android:id="@+id/photo_content_l"

@@ -128,7 +128,7 @@ public class Me extends AppActivity{
 			FriendManager.destroy();
 			appContext.setUserLogout();
 			AppManager.getAppManager().finishAllActivity();
-			startActivity(new Intent(this, Login.class));
+			startActivity(new Intent(this, LoginActivity.class));
 			break;
 
 		default:
@@ -239,7 +239,7 @@ public class Me extends AppActivity{
 							Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 							intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 							startActivityForResult(intent, ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
-						}   
+						}
 					}}).create();
 			 imageDialog.show();
 	}

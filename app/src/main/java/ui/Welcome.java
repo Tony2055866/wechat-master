@@ -63,7 +63,7 @@ public class Welcome extends AppActivity{
 	private void redirectTo(){     
 		if(!appContext.isLogin()){
 //			if(!showWhatsNewOnFirstLaunch()){
-				Intent intent = new Intent(this,Login.class);
+				Intent intent = new Intent(this,LoginActivity.class);
 				startActivity(intent);
 				AppManager.getAppManager().finishActivity(this);
 //			}

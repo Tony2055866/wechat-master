@@ -2,7 +2,6 @@ package config;
 
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smackx.GroupChatInvitation;
@@ -53,16 +52,14 @@ public class XmppConnectionManager {
 	}
 
 	public XMPPConnection init() {
-		Connection.DEBUG_ENABLED = false;
+		Connection.DEBUG_ENABLED = true;
 		ProviderManager pm = ProviderManager.getInstance();
 		configure(pm);
-
 		connectionConfig = new ConnectionConfiguration(XmppHost, XmppPort);
 		connectionConfig.setSASLAuthenticationEnabled(false);
 		connectionConfig.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
 		connectionConfig.setReconnectionAllowed(true);
 		connectionConfig.setSendPresence(true);
-//		Roster.setDefaultSubscriptionMode(Roster.SubscriptionMode.manual);
 		connection = new XMPPConnection(connectionConfig);
 		
 		return connection;

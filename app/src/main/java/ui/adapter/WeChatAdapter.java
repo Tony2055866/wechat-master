@@ -116,7 +116,6 @@ public class WeChatAdapter extends BaseAdapter {
 		if (ppCount != null && ppCount > 0) {
 			holder.paopao.setText(ppCount + "");
 			holder.paopao.setVisibility(View.VISIBLE);
-
 		} else {
 			holder.paopao.setVisibility(View.GONE);
 		}
@@ -146,17 +145,14 @@ public class WeChatAdapter extends BaseAdapter {
 				FriendManager.getInstance(context).saveOrUpdateFriend(userInfo.userDetail);
 				holder.titleView.setText(userInfo.userDetail.nickName);
 				ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+userInfo.userDetail.userHead, holder.avatarImageView, CommonValue.DisplayOptions.default_options);
-		
 			}
 			
 			@Override
 			public void onFailure(String message) {
-			
 			}
 			
 			@Override
 			public void onError(Exception e) {
-				
 			}
 		});
 	}

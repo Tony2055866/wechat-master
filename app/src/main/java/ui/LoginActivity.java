@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.donal.wechat.R;
@@ -28,7 +30,7 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
     private Button mBtnRegister;
     private Button mBtnLogin;
     private EditText mAccounts, mPassword;
-
+    private CheckBox checkBox;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
         mBtnLogin.setOnClickListener(this);
         mAccounts = (EditText) findViewById(R.id.lgoin_accounts);
         mPassword = (EditText) findViewById(R.id.login_password);
-
+        checkBox = (CheckBox)findViewById(R.id.auto_save_password);
     }
 
     /**
@@ -85,16 +87,17 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
             DialogFactory.ToastDialog(this, "notice", LoginActivity.this.getString(R.string.password_not_empty));
         } else {
             try {
-                loadingPd = UIHelper.showProgress(this, null, null, true);
-                ApiClent.login(appContext, accounts, password, new ApiClent.ClientCallback() {
+                loadingPd = UIHelper.showProgress(this, "登录", "努力的登录中......", true);
+                ApiClent.loginV2(appContext, accounts, password, new ApiClent.ClientCallback() {
                     @Override
                     public void onSuccess(Object data) {
                         UIHelper.dismissProgress(loadingPd);
                         UserEntity user = (UserEntity) data;
+                        Log.i("tong test", "user info:" + user.toString());
                         if (user.status == 1) {
                             appContext.saveLoginInfo(user);
-                            appContext.saveLoginPassword(password);
-                            saveLoginConfig(appContext.getLoginInfo());
+                            //appContext.saveLoginPassword(password);
+                            saveLoginConfig(appContext.getLoginInfo(), checkBox.isChecked() );
                             Intent intent = new Intent(LoginActivity.this, Tabbar.class);
                             startActivity(intent);
                             AppManager.getAppManager().finishActivity(LoginActivity.this);
@@ -103,11 +106,13 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
 
                     @Override
                     public void onFailure(String message) {
+                        Log.e("tong test", "ApiClent.loginV2 fail! msg:" + message);
                         UIHelper.dismissProgress(loadingPd);
                     }
 
                     @Override
                     public void onError(Exception e) {
+                        Log.e("tong test", "ApiClent.loginV2 error!", e);
                         UIHelper.dismissProgress(loadingPd);
                     }
                 });

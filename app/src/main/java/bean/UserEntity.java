@@ -27,4 +27,14 @@ public class UserEntity extends Entity{
 		}
 		return data;
 	}
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "status=" + status +
+                ", msg='" + msg + '\'' +
+                ", apiKey='" + apiKey + '\'' +
+                ", userInfo=" + userInfo +
+                '}';
+    }
 }
