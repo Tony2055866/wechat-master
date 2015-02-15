@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.imageaware.ImageAware;
  */
 public class CommonValue {
 	public static String PackageName = "com.donal.wechat";
-	public static String host = "192.168.1.100";
+	public static String host = "192.168.1.104";
 	public static String BASE_API = "http://"+host+":8080/wechat/api/";
 	public static String BASE_URL = "http://"+host+":8080/";
 	

@@ -36,7 +36,7 @@
             android:layout_height="44.0dip"
             android:background="#00ffffff"
             android:hint="@string/account"
-            android:maxLength="16"
+            android:maxLength="36"
             android:maxLines="1"
             android:paddingLeft="12.0dip"
             android:textColor="#ff1d1d1d"
