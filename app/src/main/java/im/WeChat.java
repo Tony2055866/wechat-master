@@ -149,6 +149,7 @@ public class WeChat extends AWechatActivity {
 			@Override
 			public void run() {
 				Message msg = new Message();
+                Log.i("tong test","connect , getLoginInfo : " + appContext.getLoginInfo());
 				try {
 					String password = appContext.getLoginInfo().userInfo.password;
 					String userId = appContext.getLoginUid();

@@ -375,7 +375,8 @@ public class ApiClent {
 						String nickName = userDetail.getString("nickName");
 						String description = userDetail.getString("description");
 						String userHead = userDetail.getString("userHead");
-						UserInfo user = new UserInfo();
+						//UserInfo user = new UserInfo();
+                        UserInfo user = appContext.getLoginInfo().userInfo;
 						user.nickName = nickName;
 						user.description = description;
 						user.userHead = userHead;
@@ -394,6 +395,55 @@ public class ApiClent {
 			}
 		});
 	}
+
+
+    public static void modifiedUserInfo(final WCApplication appContext, String apiKey, final UserInfo userInfo, final ClientCallback callback) {
+        RequestParams params = new RequestParams();
+        params.add("apiKey", apiKey);
+        if (StringUtils.notEmpty(userInfo.nickName)) {
+            params.add("nickName", userInfo.nickName);
+        }
+        if (StringUtils.notEmpty(userInfo.userHead)) {
+            params.add("userHead", userInfo.userHead);
+        }
+        if (StringUtils.notEmpty(userInfo.description)) {
+            params.add("description", userInfo.description);
+        }
+        params.add("mLang", userInfo.mLang);
+        params.add("lLang", userInfo.lLang);
+        
+        QYRestClient.post("modUserInfo.do", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    Logger.i(new String(responseBody));
+                    JSONObject json = new JSONObject(new String(responseBody));
+                    if (json.getInt("status") == 1) {
+                        JSONObject userDetail = json.getJSONObject("userDetail");
+                        String nickName = userDetail.getString("nickName");
+                        String description = userDetail.getString("description");
+                        String userHead = userDetail.getString("userHead");
+                       // UserInfo user = new UserInfo();
+                        userInfo.nickName = nickName;
+                        userInfo.description = description;
+                        userInfo.userHead = userHead;
+                        userInfo.mLang = userDetail.getString("mLang");
+                        userInfo.lLang = userDetail.getString("lLang");
+                        appContext.modifyLoginInfo(userInfo);
+                        callback.onSuccess("修改成功");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  byte[] responseBody, Throwable error) {
+                callback.onFailure(message_error);
+            }
+        });
+    }
 	
 	//下载
 	public static void downVoiceFromQiniu(Context context, final String url, final String format, final ClientCallback callback) {

@@ -11,6 +11,8 @@ import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
+import tools.StringUtils;
+import util.Utils;
 
 /**
  * wechat
@@ -20,19 +22,30 @@ import com.nostra13.universalimageloader.core.imageaware.ImageAware;
  */
 public class CommonValue {
 	public static String PackageName = "com.donal.wechat";
-	public static String host = "192.168.1.104";
+    public static String host = "192.168.31.135";
 	public static String BASE_API = "http://"+host+":8080/wechat/api/";
-	public static String BASE_URL = "http://"+host+":8080/";
-	
-	public static final int kWCMessageTypePlain = 0;
+	public static String BASE_URL = "http://"+host+":8080/wechat/";
+
+    public static final String ITEMS[] = {"汉语","日语","韩语","英语", "西班牙语", "法语"};
+
+    public static final int kWCMessageTypePlain = 0;
 	public static final int kWCMessageTypeImage = 1;
 	public static final int kWCMessageTypeVoice =2;
 	public static final int kWCMessageTypeLocation=3;
 	
 	public static final int kWCMessageStatusWait = 1;
 	public static final int kWCMessageStatusSending = 2;
-	
-	// auil options
+
+    public static boolean[] getCheckedByString(String currentSelected) {
+        boolean res[] = new boolean[ITEMS.length];
+        String strArr[] = currentSelected.split(",");
+        for(String str:strArr){
+            res[ Integer.parseInt(str) ] = true;
+        }
+        return res;
+    }
+
+    // auil options
 	public interface DisplayOptions {
 		public DisplayImageOptions default_options = new DisplayImageOptions.Builder()
 				.bitmapConfig(Bitmap.Config.RGB_565)
@@ -108,4 +121,16 @@ public class CommonValue {
 	 * 打开会话
 	 */
 	public static final int REQUEST_OPEN_CHAT = 2;
+    
+    public static String getLangStrings(String langIds){
+        if(StringUtils.notEmpty(langIds)){
+            String[] ids = langIds.split(",");
+            String res = ITEMS[Integer.parseInt(ids[0])];
+            for(int i=1; i<ids.length; i++){
+                res += "、"+ ITEMS[Integer.parseInt(ids[i])];
+            }
+            return res;
+        }
+        return "";
+    }
 }

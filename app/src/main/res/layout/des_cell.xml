@@ -5,12 +5,13 @@
     android:orientation="horizontal" >
     <TextView 
 	        android:id="@+id/title"
-	        android:layout_marginLeft="10dp"
+	        android:layout_marginLeft="20dp"
 	        android:layout_width="80dp"
 	        android:layout_height="20dp"
 	        android:layout_marginTop="10dp"
 	        android:textSize="15dp"
 	        android:textColor="#3b3b3b"
+            
 	        android:gravity="top"
 	        />
 	    <TextView 
@@ -20,7 +21,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="15dp"
+	        android:layout_marginRight="20dp"
 	        android:gravity="right|top"
 	        android:textSize="15dp"
 	        android:textColor="#3b3b3b"

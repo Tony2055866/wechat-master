@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.donal.wechat.R;
 
+import config.CommonValue;
 import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPException;
@@ -86,15 +87,15 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
             default:
                 break;
         }
-
     }
 
 
     public void showLangOptions(View v) {
         Log.i("tong test", "showLangOptions v:" + v + "  ; id:" + v.getId());
         final View view = v;
-        final String items[] = {"汉语","日语","韩语","英语"};
-        final boolean ischeckds[] = new boolean[items.length];
+        final String[] items = CommonValue.ITEMS;
+        final boolean ischeckds[] = CommonValue.getCheckedByString(v.getTag().toString());
+        
         final List<String> selected = new ArrayList<String>(2);
         final List<Integer> selectedIndex = new ArrayList<Integer>(2);
         AlertDialog alertDialog = new AlertDialog.Builder(this)

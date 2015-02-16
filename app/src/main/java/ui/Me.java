@@ -3,6 +3,9 @@
  */
 package ui;
 
+import android.app.ActionBar;
+import android.util.Log;
+import android.widget.*;
 import im.Chating;
 
 import java.io.File;
@@ -31,13 +34,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import bean.KeyValue;
 import bean.UserEntity;
 import bean.UserInfo;
@@ -52,6 +49,7 @@ import config.FriendManager;
 import config.MessageManager;
 import config.NoticeManager;
 import config.XmppConnectionManager;
+import util.Utils;
 
 /**
  * wechat
@@ -65,10 +63,12 @@ public class Me extends AppActivity{
 	private ListView iphoneTreeView;
 	private List<KeyValue> datas = new ArrayList<KeyValue>();
 	private FieldAdapter fieldAdapter;
-	
+    private UserEntity user = null;;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        user = appContext.getLoginInfo();
 		setContentView(R.layout.wechat);
 		initUI();
 	}
@@ -81,7 +81,8 @@ public class Me extends AppActivity{
 		View header = inflater.inflate(R.layout.more_headerview, null);
 		avatarView = (ImageView) header.findViewById(R.id.avatar);
 		nameTV = (TextView) header.findViewById(R.id.title);
-		imageLoader.displayImage(CommonValue.BASE_URL+appContext.getLoginUserHead(), avatarView, CommonValue.DisplayOptions.avatar_options);
+        if(StringUtils.notEmpty(user.userInfo.userHead))
+		    imageLoader.displayImage(CommonValue.BASE_URL+user.userInfo.userHead, avatarView, CommonValue.DisplayOptions.avatar_options);
 		iphoneTreeView.addHeaderView(header);
 		View footer = inflater.inflate(R.layout.me_footer, null);
 		iphoneTreeView.addFooterView(footer);
@@ -98,15 +99,18 @@ public class Me extends AppActivity{
 				}
 				else if (position == 2) {
 					text1Dialog.show();
-				}
+				}else if(position == 3 || position == 4){
+                   showLangOptions(position);
+                }
 			}
 		});
 	}
 	
 	private void setInfo() {
-		UserEntity user = appContext.getLoginInfo();
-		datas.add(new KeyValue("昵称", user.userInfo.nickName));
+		datas.add(new KeyValue("名字", user.userInfo.nickName));
 		datas.add(new KeyValue("个性签名", user.userInfo.description));
+        datas.add(new KeyValue("母语", CommonValue.getLangStrings(user.userInfo.mLang)));
+        datas.add(new KeyValue("学习语言", CommonValue.getLangStrings(user.userInfo.lLang)));
 		fieldAdapter.notifyDataSetChanged();
 	}
 	
@@ -162,6 +166,7 @@ public class Me extends AppActivity{
 					newPhotoPath = imagePathAfterCompass;
 					uploadPhotoService(newPhotoPath);
 				} catch (IOException e) {
+                    Log.e("tong test", "onActivityResult" ,e);
 //					Crashlytics.logException(e);
 				}
 			}
@@ -267,7 +272,26 @@ public class Me extends AppActivity{
 			}
 		});
 	}
-	
+
+    private void modify(UserInfo userInfo) {
+        pg = UIHelper.showProgress(this, "", "保存中", true);
+        ApiClent.modifiedUserInfo(appContext, appContext.getLoginApiKey(), userInfo, new ClientCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                UIHelper.dismissProgress(pg);
+                showToast((String)data);
+            }
+            @Override
+            public void onFailure(String message) {
+                UIHelper.dismissProgress(pg);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                UIHelper.dismissProgress(pg);
+            }
+        });
+    }
 	private void modify(String nickname, String head, String des) {
 		pg = UIHelper.showProgress(this, "", "保存中", true);
 		ApiClent.modifiedUser(appContext, appContext.getLoginApiKey(), nickname, head, des, new ClientCallback() {
@@ -295,9 +319,10 @@ public class Me extends AppActivity{
 		LayoutInflater inFlater = LayoutInflater.from(this);  
 		View textDialogView = inFlater.inflate(R.layout.lovecode_edit_edittext_dialog, null);
 		final EditText ed = (EditText) textDialogView.findViewById(R.id.text);
+        ed.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(android.R.drawable.ic_dialog_info);
-		builder.setTitle("编辑昵称");
+		builder.setTitle("编辑姓名");
 		builder.setView(textDialogView);
 		builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
@@ -345,4 +370,69 @@ public class Me extends AppActivity{
 		});
 		text1Dialog = builder.create();
 	}
+
+    public void showLangOptions(final int position) {
+        final String[] items = CommonValue.ITEMS;
+        
+        final List<String> selected = new ArrayList<String>(2);
+        final List<Integer> selectedIndex = new ArrayList<Integer>(2);
+        
+        
+        String currentSelected = null;
+        if(position == 3){
+            currentSelected = user.userInfo.mLang;
+        }else{
+            currentSelected = user.userInfo.lLang;
+        }
+        final boolean ischeckds[] = CommonValue.getCheckedByString(currentSelected);
+        
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("选择你的母语")
+                .setMultiChoiceItems(items, ischeckds, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        Log.i("tong test", "showMotherLangOptins click : " + i +"  boolean:" +b);
+                        if(i < items.length) ischeckds[i] = b;
+//                        if(b){
+//                            selected.add(items[i]);
+//                            selectedIndex.add(i);
+//                        }
+                    }
+                })
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for(int k=0; k<ischeckds.length; k++){
+                            if( ischeckds[k]){
+                                selectedIndex.add(k);
+                                selected.add(items[k]);
+                            }
+                            
+                        }
+                        
+                        String selectedStrings = "";
+                        if (selected.size() > 0) {
+                            selectedStrings = Utils.join(selected.toArray(), ',');
+                        }
+
+                        String selectedIndexs = "";
+                        if (selectedIndex.size() > 0) {
+                            selectedIndexs = Utils.join(selectedIndex.toArray(), ',');
+                        }
+                        
+                        if (position == 3) { //选择我的母语
+                            user.userInfo.mLang = selectedIndexs;
+                        } else {
+                            user.userInfo.lLang = selectedIndexs;
+                        }
+                        Log.i("tong test", "datas.get(position-1).value :" + datas.get(position-1).value + " selectedStrings");
+                        datas.get(position-1).value = selectedStrings;
+                        fieldAdapter.notifyDataSetChanged();
+                        
+                        modify(user.userInfo);
+                    }
+                }).setNegativeButton("取消", null)
+                .show();
+    }
 }
