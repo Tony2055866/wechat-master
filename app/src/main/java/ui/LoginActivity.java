@@ -101,6 +101,8 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
                             Intent intent = new Intent(LoginActivity.this, Tabbar.class);
                             startActivity(intent);
                             AppManager.getAppManager().finishActivity(LoginActivity.this);
+                        }else{
+                            DialogFactory.ToastDialog(null, "登录提示", "用户名或密码错误！");
                         }
                     }
 

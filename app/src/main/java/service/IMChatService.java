@@ -143,6 +143,7 @@ public class IMChatService extends Service {
 			String contentText, Class activity, String from) {
 		JsonMessage msg = new JsonMessage();
 		Gson gson = new Gson();
+        ///////////task
 		msg = gson.fromJson(contentText, JsonMessage.class);
 		Intent notifyIntent = new Intent(this, activity);
 		notifyIntent.putExtra("to", from);
