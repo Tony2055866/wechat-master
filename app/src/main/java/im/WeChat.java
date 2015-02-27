@@ -154,7 +154,7 @@ public class WeChat extends AWechatActivity {
 					XMPPConnection connection = XmppConnectionManager.getInstance()
 							.getConnection();
 					connection.connect();
-					connection.login(userId, password); //, "android"
+					connection.login(userId, password, "android"); //
 					connection.sendPacket(new Presence(Presence.Type.available));
 					Log.i("tong test","XMPPClient Logged in as: " + connection.getUser() + " password:" + password);
 					msg.what = 1;

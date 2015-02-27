@@ -404,7 +404,7 @@ containing a value of this type.
         public static final int ic_action_search=0x7f02003b;
         public static final int ic_launcher=0x7f02003c;
         public static final int ic_pulltorefresh_arrow=0x7f02003d;
-        public static final int incoming=0x7f02003e;
+        public static final int incoming2=0x7f02003e;
         public static final int incoming_b=0x7f02003f;
         public static final int info_bg=0x7f020040;
         public static final int input_bar_background=0x7f020041;

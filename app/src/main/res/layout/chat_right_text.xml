@@ -56,7 +56,7 @@
            android:layout_marginRight="5dp"
            android:layout_below="@id/textview_name_r"
            android:layout_toLeftOf="@id/image_portrait_r"
-           android:background="@drawable/outgoing_b">
+           android:background="@drawable/outgoing">
            <TextView
 		       android:id="@+id/textview_content_r"
 		       android:layout_width="wrap_content"

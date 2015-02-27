@@ -87,7 +87,7 @@ public class IMChatService extends Service {
 		cListener = new ChatListener();
 		conn.addPacketListener(cListener, new MessageTypeFilter(
 				Message.Type.chat));
-        ChatManager cm = XmppConnectionManager.getInstance().getConnection().getChatManager();
+        /*ChatManager cm = XmppConnectionManager.getInstance().getConnection().getChatManager();
         Log.i("tong test","initChatManager addChatListener : ");
         cm.addChatListener(new ChatManagerListener() {
             @Override
@@ -100,7 +100,7 @@ public class IMChatService extends Service {
                     }
                 });
             }
-        });
+        });*/
         
         
 	}

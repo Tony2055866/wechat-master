@@ -71,7 +71,7 @@ public abstract class AChating extends AppActivity{
         //queryResult+"@"+XmppConnection.getConnection().getServiceName()
         //the "to" is above ?
         XMPPConnection connection = XmppConnectionManager.getInstance().getConnection();
-		chat = connection.getChatManager().createChat(to + "@" + connection.getServiceName(), null);
+		chat = connection.getChatManager().createChat(to, null);
 	}
 	
 	@Override
