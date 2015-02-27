@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package bean;
 
@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class StrangerEntity implements Serializable{

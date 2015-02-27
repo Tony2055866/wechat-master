@@ -4,6 +4,7 @@ import bean.UserEntity;
 import bean.UserInfo;
 
 import com.donal.wechat.R;
+import com.google.gson.Gson;
 
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -31,7 +32,7 @@ import tools.Logger;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class AppActivity extends BaseActivity implements AppActivitySupport{
@@ -40,7 +41,24 @@ public class AppActivity extends BaseActivity implements AppActivitySupport{
 	protected SharedPreferences preferences;
 	protected ProgressDialog pg = null;
 	protected NotificationManager notificationManager;
-	
+
+    //保存用户信息到本地
+    public void saveAccountToLocal(UserEntity user) {
+        SharedPreferences sp = this.getContext().getSharedPreferences(CommonValue.SHARED_PREFERENCE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("user", new Gson().toJson(user));
+        editor.commit();
+    }
+    
+    public UserEntity getAccountFromLocal(){
+        SharedPreferences sp = this.getContext().getSharedPreferences(CommonValue.SHARED_PREFERENCE, MODE_PRIVATE);
+        String jsonString = sp.getString("user","");
+        if(jsonString != ""){
+            return new Gson().fromJson(jsonString, UserEntity.class);
+        }
+        return null;
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package im;
 
@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Message;
 import org.json.JSONObject;
 
@@ -45,7 +46,7 @@ import config.XmppConnectionManager;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public abstract class AChating extends AppActivity{
@@ -67,8 +68,10 @@ public abstract class AChating extends AppActivity{
 		NoticeManager.getInstance(context).updateStatusByFrom(to, Notice.READ);
 		if (to == null)
 			return;
-		chat = XmppConnectionManager.getInstance().getConnection()
-				.getChatManager().createChat(to, null);
+        //queryResult+"@"+XmppConnection.getConnection().getServiceName()
+        //the "to" is above ?
+        XMPPConnection connection = XmppConnectionManager.getInstance().getConnection();
+		chat = connection.getChatManager().createChat(to + "@" + connection.getServiceName(), null);
 	}
 	
 	@Override
@@ -94,7 +97,6 @@ public abstract class AChating extends AppActivity{
 			Notice notice = (Notice) intent.getSerializableExtra("notice");
 			if (CommonValue.NEW_MESSAGE_ACTION.equals(action)) {
 				IMMessage message = intent.getParcelableExtra(IMMessage.IMMESSAGE_KEY);
-				
 				if (!message.getFromSubJid().equals(to)) {
 					return;
 				}

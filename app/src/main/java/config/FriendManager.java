@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package config;
 

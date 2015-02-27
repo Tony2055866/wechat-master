@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package ui;
 
@@ -31,7 +31,7 @@ import config.ApiClent.ClientCallback;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class FindFriend extends AppActivity implements OnScrollListener, OnRefreshListener{

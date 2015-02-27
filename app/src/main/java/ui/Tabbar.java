@@ -21,7 +21,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class Tabbar extends TabActivity implements OnCheckedChangeListener{

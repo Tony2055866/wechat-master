@@ -83,6 +83,7 @@ public class SwipeBackActivityHelper {
             method.setAccessible(true);
             method.invoke(mActivity, null);
         } catch (Throwable t) {
+            
         }
     }
 

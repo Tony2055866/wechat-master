@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package im;
 
@@ -84,7 +84,7 @@ import android.widget.Toast;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class Chating extends AChating implements OnTouchListener, OnItemClickListener, VoiceBubbleListener, OnEditorActionListener{
@@ -113,7 +113,9 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 		setContentView(R.layout.chating);
 		initUI();
 		user = FriendManager.getInstance(context).getFriend(to.split("@")[0]);
-	}
+        Log.i("tong test", "Chating, onCreate , user: " + user);
+
+    }
 	
 	private void initUI() {
 		faceOrTextButton = (Button) findViewById(R.id.faceOrTextButton);
@@ -1121,13 +1123,14 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 				Toast.makeText(Chating.this, "不能为空",
 						Toast.LENGTH_SHORT).show();
 			} else {
-
 				try {
 					sendMessage(message);
 					messageInput.setText("");
 				} catch (Exception e) {
 					showToast("信息发送失败");
 					messageInput.setText(message);
+                    e.printStackTrace();;
+                    //Log.e("tong test","sendMessage error" ,e );
 				}
 				closeInput();
 			}

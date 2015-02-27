@@ -99,4 +99,19 @@ public class HistoryChatBean implements Comparable<HistoryChatBean>{
 		return other.noticeTime.compareTo(this.noticeTime);
 	}
 
+    @Override
+    public String toString() {
+        return "HistoryChatBean{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", status=" + status +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", noticeTime='" + noticeTime + '\'' +
+                ", noticeSum=" + noticeSum +
+                ", noticeType=" + noticeType +
+                '}';
+    }
 }
+

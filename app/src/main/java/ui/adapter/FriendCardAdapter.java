@@ -81,6 +81,7 @@ public class FriendCardAdapter extends BaseAdapter {
 		convertView.setOnClickListener( new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
+                //点击进入聊天
 				((Friend)context).createChat(model.userId+XmppConnectionManager.BASE_XMPP_SERVER_NAME);
 			}
 		});

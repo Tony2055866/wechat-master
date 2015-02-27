@@ -23,7 +23,7 @@ import android.view.View;
 import config.CommonValue;
 
 public class AudioPlayManager {
-	public static final String CACHE_VOICE_FILE_PATH = Environment.getExternalStorageDirectory() + "/donal/voice/";
+	public static final String CACHE_VOICE_FILE_PATH = Environment.getExternalStorageDirectory() + "/gaotong/voice/";
 	
 	private View convertView;
 	private static AudioPlayManager audioPlayManager = null;

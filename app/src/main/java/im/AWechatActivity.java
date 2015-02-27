@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package im;
 
@@ -29,7 +29,7 @@ import android.os.Bundle;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public abstract class AWechatActivity extends AppActivity {

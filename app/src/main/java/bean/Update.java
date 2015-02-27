@@ -14,7 +14,7 @@ import tools.AppException;
 import tools.Logger;
 
 /**
- * @author Donal Tong 
+ * @author gaotong Tong 
  * momoka
  * 2013-1-12
  */

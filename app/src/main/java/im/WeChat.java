@@ -17,13 +17,10 @@ import org.jivesoftware.smack.packet.XMPPError;
 
 import tools.Logger;
 import ui.adapter.WeChatAdapter;
-import ui.view.SlideDrawerView;
 
 import com.donal.wechat.R;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,7 +43,7 @@ import config.XmppConnectionManager;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class WeChat extends AWechatActivity {
@@ -57,7 +54,7 @@ public class WeChat extends AWechatActivity {
 	private Animation indicatorAnimation;
 	
 	private List<HistoryChatBean> inviteNotices;
-	private WeChatAdapter noticeAdapter;
+	private WeChatAdapter wechatAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,18 +92,18 @@ public class WeChat extends AWechatActivity {
         inviteNotices = new ArrayList<HistoryChatBean>();
         inviteNotices = MessageManager.getInstance(context)
 				.getRecentContactsWithLastMsg();
-		noticeAdapter = new WeChatAdapter(this, inviteNotices);
-		xlistView.setAdapter(noticeAdapter);
-		noticeAdapter.setOnClickListener(contacterOnClickJ);
-		noticeAdapter.setOnLongClickListener(contacterOnLongClickJ);
+		wechatAdapter = new WeChatAdapter(this, inviteNotices);
+		xlistView.setAdapter(wechatAdapter);
+		wechatAdapter.setOnClickListener(contacterOnClickJ);
+		wechatAdapter.setOnLongClickListener(contacterOnLongClickJ);
 	}
 	
 	private void getHistoryChat() {
 		final Handler handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				noticeAdapter.setNoticeList(inviteNotices);
-				noticeAdapter.notifyDataSetChanged();
+				wechatAdapter.setNoticeList(inviteNotices);
+				wechatAdapter.notifyDataSetChanged();
 			}
 		};
 		ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
@@ -115,6 +112,7 @@ public class WeChat extends AWechatActivity {
 			public void run() {
 				inviteNotices = MessageManager.getInstance(context)
 						.getRecentContactsWithLastMsg();
+                Log.i("tong test","getHistoryChat, inviteNotices:" + inviteNotices);
 				handler.sendEmptyMessage(1);
 			}
 		});
@@ -189,7 +187,7 @@ public class WeChat extends AWechatActivity {
 		final Handler handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				noticeAdapter.notifyDataSetChanged();
+				wechatAdapter.notifyDataSetChanged();
 			}
 		};
 		ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
@@ -205,7 +203,7 @@ public class WeChat extends AWechatActivity {
 						ch.setNoticeSum(x);
 					}
 				}
-				noticeAdapter.setNoticeList(inviteNotices);
+				wechatAdapter.setNoticeList(inviteNotices);
 				handler.sendEmptyMessage(0);
 			}
 		});
@@ -237,7 +235,7 @@ public class WeChat extends AWechatActivity {
 	@Override
 	protected void handReConnect(boolean isSuccess) {
 		if (CommonValue.RECONNECT_STATE_SUCCESS == isSuccess) {
-			titleBarView.setText("微信");
+			titleBarView.setText("聊天");
 
 		} else if (CommonValue.RECONNECT_STATE_FAIL == isSuccess) {
 			titleBarView.setText("未连接");
@@ -261,7 +259,7 @@ public class WeChat extends AWechatActivity {
 		final Handler handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				noticeAdapter.notifyDataSetChanged();
+				wechatAdapter.notifyDataSetChanged();
 			}
 		};
 		ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
@@ -290,7 +288,7 @@ public class WeChat extends AWechatActivity {
 				switch(which){
 				case 0:
 					inviteNotices.remove(notice);
-					noticeAdapter.notifyDataSetChanged();
+					wechatAdapter.notifyDataSetChanged();
 					MessageManager.getInstance(context).delChatHisWithSb(notice.getFrom());
 					break;
 				}
@@ -319,7 +317,7 @@ public class WeChat extends AWechatActivity {
 		final Handler handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				noticeAdapter.notifyDataSetChanged();
+				wechatAdapter.notifyDataSetChanged();
 			}
 		};
 		ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();

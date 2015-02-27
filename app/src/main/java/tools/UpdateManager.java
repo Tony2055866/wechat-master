@@ -42,7 +42,7 @@ import android.widget.Toast;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class UpdateManager {

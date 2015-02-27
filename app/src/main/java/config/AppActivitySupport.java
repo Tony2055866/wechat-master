@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package config;
 
@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public interface AppActivitySupport {

@@ -17,15 +17,17 @@ import util.Utils;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class CommonValue {
 	public static String PackageName = "com.donal.wechat";
-    public static String host = "192.168.31.135";
+    public static String host = "192.168.1.101";
 	public static String BASE_API = "http://"+host+":8080/wechat/api/";
 	public static String BASE_URL = "http://"+host+":8080/wechat/";
 
+    public static final String SHARED_PREFERENCE = "FF_USER";
+    
     public static final String ITEMS[] = {"汉语","日语","韩语","英语", "西班牙语", "法语"};
 
     public static final int kWCMessageTypePlain = 0;

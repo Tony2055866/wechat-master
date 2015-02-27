@@ -28,7 +28,7 @@ import android.content.Intent;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class WCApplication extends AppContext {
@@ -82,10 +82,19 @@ public class WCApplication extends AppContext {
 	
 	@SuppressWarnings("serial")
 	public void saveLoginInfo(final UserEntity user) {
-		this.loginUid = user.userInfo.userId;
-		this.apiKey = user.apiKey;
-		this.login = true;
-        userEntity = user;
+        if(user != null){
+            this.loginUid = user.userInfo.userId;
+            this.apiKey = user.apiKey;
+            this.login = true;
+            userEntity = user;
+        }else{
+            login = false;
+            userEntity = null;
+            apiKey = null;
+            loginUid = null;
+        }
+                
+		
 	}
 	
 	public void modifyLoginInfo(final UserInfo user) {
@@ -141,9 +150,9 @@ public class WCApplication extends AppContext {
         this.userEntity = null;
 
 	}
-	
-	
-	
-	
-	
+
+
+    public void saveUserInfo(UserInfo userDetail) {
+        userEntity.userInfo = userDetail;
+    }
 }

@@ -282,6 +282,7 @@ public class ApiClent {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 				try {
+                    Log.i("tong test","getUserInfo , userId: " + new String(responseBody));
 					UserDetail data = UserDetail.parse(new String(responseBody));
 					callback.onSuccess(data);
 				} catch (Exception e) {

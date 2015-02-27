@@ -5,9 +5,7 @@ import im.model.HistoryChatBean;
 import java.util.List;
 
 import tools.DateUtil;
-import tools.Logger;
 import tools.StringUtils;
-import ui.adapter.FriendCardAdapter.CellHolder;
 
 import bean.JsonMessage;
 import bean.UserDetail;
@@ -19,12 +17,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import config.ApiClent;
 import config.ApiClent.ClientCallback;
 import config.CommonValue;
-import config.CommonValue;
 import config.FriendManager;
-import config.WCApplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +33,7 @@ import android.widget.TextView;
 
 public class WeChatAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
-	private List<HistoryChatBean> inviteUsers;
+	private List<HistoryChatBean> chatBeans;
 	private Context context;
 	private OnClickListener contacterOnClick;
 	private OnLongClickListener contacterOnLongClick;
@@ -51,24 +48,24 @@ public class WeChatAdapter extends BaseAdapter {
 		TextView newDate;
 	}
 	
-	public WeChatAdapter(Context context, List<HistoryChatBean> inviteUsers) {
+	public WeChatAdapter(Context context, List<HistoryChatBean> ChatBeans) {
 		this.context = context;
 		mInflater = LayoutInflater.from(context);
-		this.inviteUsers = inviteUsers;
+		this.chatBeans = ChatBeans;
 	}
 
 	public void setNoticeList(List<HistoryChatBean> inviteUsers) {
-		this.inviteUsers = inviteUsers;
+		this.chatBeans = inviteUsers;
 	}
 
 	@Override
 	public int getCount() {
-		return inviteUsers.size();
+		return chatBeans.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return inviteUsers.get(position);
+		return chatBeans.get(position);
 	}
 
 	@Override
@@ -78,7 +75,7 @@ public class WeChatAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		HistoryChatBean notice = inviteUsers.get(position);
+		HistoryChatBean notice = chatBeans.get(position);
 		CellHolder cell = null;
 		if (convertView == null) {
 			cell = new CellHolder();
@@ -107,10 +104,11 @@ public class WeChatAdapter extends BaseAdapter {
 	}
 	
 	public void setOnLongClickListener(OnLongClickListener contacterOnLongClick ) {
-		this.contacterOnLongClick = contacterOnLongClick;
-	}
-	
-	private void getUserInfo(final String userId, final CellHolder holder, HistoryChatBean notice) {
+        this.contacterOnLongClick = contacterOnLongClick;
+    }
+
+    private void getUserInfo(final String userId, final CellHolder holder, HistoryChatBean notice) {
+        Log.i("tong test",this.getClass() + " getUserInfo userId:" + userId);
 		holder.timeView.setText(DateUtil.wechat_time(notice.getNoticeTime()));
 		Integer ppCount = notice.getNoticeSum();
 		if (ppCount != null && ppCount > 0) {

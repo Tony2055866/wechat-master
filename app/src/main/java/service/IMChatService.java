@@ -7,6 +7,10 @@ import im.model.Notice;
 import java.util.Calendar;
 
 
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManager;
+import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
@@ -34,6 +38,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * 
@@ -82,6 +87,22 @@ public class IMChatService extends Service {
 		cListener = new ChatListener();
 		conn.addPacketListener(cListener, new MessageTypeFilter(
 				Message.Type.chat));
+        ChatManager cm = XmppConnectionManager.getInstance().getConnection().getChatManager();
+        Log.i("tong test","initChatManager addChatListener : ");
+        cm.addChatListener(new ChatManagerListener() {
+            @Override
+            public void chatCreated(Chat chat, boolean b) {
+                Log.i("tong test","chatCreated chat : " + chat);
+                chat.addMessageListener(new MessageListener() {
+                    @Override
+                    public void processMessage(Chat chat2, Message message) {
+                        
+                    }
+                });
+            }
+        });
+        
+        
 	}
 
 	class ChatListener implements PacketListener {

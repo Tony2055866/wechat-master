@@ -2,6 +2,7 @@ package ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,10 +13,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.donal.wechat.R;
+import com.google.gson.Gson;
 
 import bean.UserEntity;
 import config.ApiClent;
 import config.AppActivity;
+import config.CommonValue;
 import config.WCApplication;
 import tools.AppManager;
 import tools.UIHelper;
@@ -94,15 +97,18 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
                         UIHelper.dismissProgress(loadingPd);
                         UserEntity user = (UserEntity) data;
                         Log.i("tong test", "user info:" + user.toString());
+                        
+                        //登录成功
                         if (user.status == 1) {
                             appContext.saveLoginInfo(user);
+                            saveAccountToLocal(user);
                             //appContext.saveLoginPassword(password);
                             saveLoginConfig(appContext.getLoginInfo(), checkBox.isChecked() );
                             Intent intent = new Intent(LoginActivity.this, Tabbar.class);
                             startActivity(intent);
                             AppManager.getAppManager().finishActivity(LoginActivity.this);
                         }else{
-                            DialogFactory.ToastDialog(null, "登录提示", "用户名或密码错误！");
+                            DialogFactory.ToastDialog(LoginActivity.this, "登录提示", user.msg);
                         }
                     }
 
@@ -141,6 +147,8 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
             }
         }
     }
+
+    
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {

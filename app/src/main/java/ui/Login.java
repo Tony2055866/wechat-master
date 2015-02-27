@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package ui;
 
@@ -40,7 +40,7 @@ import config.ApiClent.ClientCallback;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class Login extends AppActivity{

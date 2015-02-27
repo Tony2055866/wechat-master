@@ -9,7 +9,7 @@ import com.loopj.android.http.RequestParams;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class QYRestClient {

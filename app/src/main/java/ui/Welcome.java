@@ -3,6 +3,10 @@ package ui;
 
 
 import com.crashlytics.android.Crashlytics;
+
+import bean.UserDetail;
+import bean.UserEntity;
+import config.ApiClent;
 import im.WeChat;
 
 import com.baidu.android.pushservice.PushConstants;
@@ -22,14 +26,17 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.widget.Toast;
+
 import config.AppActivity;
 import config.CommonValue;
+import tools.UIHelper;
 
 
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class Welcome extends AppActivity{
@@ -60,19 +67,48 @@ public class Welcome extends AppActivity{
 		});
 	}
 	
-	private void redirectTo(){     
-		if(!appContext.isLogin()){
-//			if(!showWhatsNewOnFirstLaunch()){
-				Intent intent = new Intent(this,LoginActivity.class);
-				startActivity(intent);
-				AppManager.getAppManager().finishActivity(this);
-//			}
-		}
-		else {
-			Intent intent = new Intent(this, Tabbar.class);
-	        startActivity(intent);
-	        AppManager.getAppManager().finishActivity(this);
-		}
+	private void redirectTo(){
+        UserEntity userEntity = getAccountFromLocal();
+        if(userEntity == null){
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+            AppManager.getAppManager().finishActivity(this);
+        }else{
+            appContext.saveLoginInfo(userEntity);
+
+            Intent intent = new Intent(this,Tabbar.class);
+            startActivity(intent);
+            //异步的获取用户信息
+            ApiClent.getUserInfo(userEntity.apiKey, userEntity.userInfo.userId, new ApiClent.ClientCallback() {
+                @Override
+                public void onSuccess(Object data) {
+                    
+                    UserDetail detail = (UserDetail)data;
+                    appContext.saveUserInfo(detail.userDetail);
+                    AppManager.getAppManager().finishActivity(Welcome.this);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Toast.makeText(Welcome.this, "登录信息已过期，请重新登录", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Welcome.this,LoginActivity.class);
+                    startActivity(intent);
+                    appContext.saveLoginInfo(null);
+                    AppManager.getAppManager().finishActivity(Welcome.this);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Toast.makeText(Welcome.this, "登录信息已过期，请重新登录", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Welcome.this,LoginActivity.class);
+                    startActivity(intent);
+                    appContext.saveLoginInfo(null);
+                    AppManager.getAppManager().finishActivity(Welcome.this);
+                }
+            });
+            
+            //AppManager.getAppManager().finishActivity(this);
+        }
     }
 	
 	private boolean showWhatsNewOnFirstLaunch() {

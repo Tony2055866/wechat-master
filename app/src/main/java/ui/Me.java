@@ -1,5 +1,5 @@
 /**
- * wechatdonal
+ * wechatgaotong
  */
 package ui;
 
@@ -54,7 +54,7 @@ import util.Utils;
 /**
  * wechat
  *
- * @author donal
+ * @author gaotong
  *
  */
 public class Me extends AppActivity{
