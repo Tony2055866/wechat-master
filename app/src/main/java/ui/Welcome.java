@@ -6,7 +6,9 @@ import com.crashlytics.android.Crashlytics;
 
 import bean.UserDetail;
 import bean.UserEntity;
+import bean.UserInfo;
 import config.ApiClent;
+import config.FriendManager;
 import im.WeChat;
 
 import com.baidu.android.pushservice.PushConstants;
@@ -22,11 +24,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.Toast;
+
+import java.util.List;
 
 import config.AppActivity;
 import config.CommonValue;
@@ -65,7 +70,21 @@ public class Welcome extends AppActivity{
 			public void onAnimationStart(Animation animation) {}
 			
 		});
-	}
+
+       /* UserInfo userDetail = new UserInfo();
+        userDetail.userId = "sdfsdfsdf";
+        userDetail.nickName = "test";
+        FriendManager.getInstance(context).saveOrUpdateFriend(userDetail);
+
+        UserInfo user = FriendManager.getInstance(context).getFriend("sdfsdfsdf");
+        Log.i("tong test", "welcome test user:" + user);*/
+        
+        UserInfo info = FriendManager.getInstance(context).getFriend("402880814bd548a8014bd582b6030005");
+        Log.i("tong test","FriendManager.getInstance(context).getFriend():" + info);
+        
+      List<UserInfo> allUsers=  FriendManager.getInstance(context).getAllFriend();
+        Log.i("tong test","FriendManager.getInstance(context).getAllFriend():" + allUsers);
+    }
 	
 	private void redirectTo(){
         UserEntity userEntity = getAccountFromLocal();

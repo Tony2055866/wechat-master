@@ -18,6 +18,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.util.Log;
 
 /**
  * 
@@ -58,7 +59,8 @@ public class MessageManager {
 	 * @param msg
 	 */
 	public long saveIMMessage(IMMessage msg) {
-		SQLiteTemplate st = SQLiteTemplate.getInstance(manager, false);
+        Log.i("tong test","saveIMMessage : "+ msg);
+        SQLiteTemplate st = SQLiteTemplate.getInstance(manager, false);
 		ContentValues contentValues = new ContentValues();
 		if (StringUtils.notEmpty(msg.getContent())) {
 			contentValues.put("content", StringUtils.doEmpty(msg.getContent()));

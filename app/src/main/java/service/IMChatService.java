@@ -140,12 +140,14 @@ public class IMChatService extends Service {
 				newMessage.setFromSubJid(from);
 				newMessage.setContent(message.getBody());
 				newMessage.setTime(time);
+                
 				newMessage.setType(0); 
 				MessageManager.getInstance(context).saveIMMessage(newMessage);
 				long noticeId = -1;
 
 				noticeId = noticeManager.saveNotice(notice);
 				if (noticeId != -1) {
+                    Log.i("tong test","get message and: new Intent(CommonValue.NEW_MESSAGE_ACTION)");
 					Intent intent = new Intent(CommonValue.NEW_MESSAGE_ACTION);
 					intent.putExtra(IMMessage.IMMESSAGE_KEY, msg);
 					intent.putExtra("notice", notice);

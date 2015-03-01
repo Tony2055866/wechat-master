@@ -37,11 +37,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+
 import config.AppActivity;
 import config.CommonValue;
 import config.MessageManager;
 import config.NoticeManager;
 import config.XmppConnectionManager;
+import util.ThreadPool;
 
 /**
  * wechat
@@ -64,8 +67,13 @@ public abstract class AChating extends AppActivity{
 				.getMessageListByFrom(to, 1, pageSize);
 		if (null != message_pool && message_pool.size() > 0)
 			Collections.sort(message_pool);
-		
-		NoticeManager.getInstance(context).updateStatusByFrom(to, Notice.READ);
+        
+        ThreadPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                NoticeManager.getInstance(context).updateStatusByFrom(to, Notice.READ);
+            }
+        });
 		if (to == null)
 			return;
         //queryResult+"@"+XmppConnection.getConnection().getServiceName()
@@ -100,7 +108,9 @@ public abstract class AChating extends AppActivity{
 				if (!message.getFromSubJid().equals(to)) {
 					return;
 				}
-				message_pool.add(message);
+
+                Log.i("tong test","BroadcastReceiver message:" + message);
+                message_pool.add(message);
 				receiveNewMessage(message);
 				refreshMessage(message_pool);
 			}

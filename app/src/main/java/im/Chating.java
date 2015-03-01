@@ -40,6 +40,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import config.CommonValue;
 import config.FriendManager;
 import config.NoticeManager;
+import util.ThreadPool;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -55,6 +57,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -73,6 +77,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -113,6 +118,11 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 		setContentView(R.layout.chating);
 		initUI();
 		user = FriendManager.getInstance(context).getFriend(to.split("@")[0]);
+        
+        //使用默认的，还是去服务器查询呢？
+        if(user == null){
+            
+        }
         Log.i("tong test", "Chating, onCreate , user: " + user);
 
     }
@@ -163,6 +173,34 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 				listView.setSelection(getMessages().size()-1);
 			}
 		});
+
+        final ImageButton multiMediaButton = (ImageButton)findViewById(R.id.multiMediaButton);
+        final Button sendMessageButton = (Button)findViewById(R.id.sendMessageButton);
+        messageInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                //Log.i("tong test","beforeTextChanged :" + charSequence);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                //Log.i("tong test","onTextChanged :" + charSequence);
+                
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //Log.i("tong test","afterTextChanged :" + editable.toString().trim());
+                if(editable.toString().trim().equals("")){
+                    //Log.i("tong test","afterTextChanged :" + editable.toString().trim());
+                    multiMediaButton.setVisibility(View.VISIBLE);
+                    sendMessageButton.setVisibility(View.INVISIBLE);
+                }else{
+                    sendMessageButton.setVisibility(View.VISIBLE);
+                    multiMediaButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 		messageInput.setOnEditorActionListener(this);
 	}
 	
@@ -433,7 +471,19 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 			.build();
 		}
 
-		public void refreshList(List<IMMessage> items) {
+        /**
+         * 刷新聊天的列表的显示。 更新read
+         * @param items
+         */
+		public void refreshList(final List<IMMessage> items) {
+            Log.i("tong test","refreshList and update read status:" + items );
+            ThreadPool.submit(new Runnable() {
+                @Override
+                public void run() {
+                    NoticeManager.getInstance(context).updateStatusByFrom(to, Notice.READ);
+                }
+            });
+            
 			this.items = items;
 			this.notifyDataSetChanged();
 			if (this.items.size()>1) {
@@ -468,10 +518,14 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 				IMMessage message = items.get(position);
 				String content = message.getContent();
 				JsonMessage msg = JsonMessage.parse(content);
+                
+                //Log.i("tong test","getView position:"+position + "  message:" + message + "  msg.messageType:"+msg.messageType);
 				if (convertView == null) {
+                    
 					if (message.getMsgType() == 0) {
 						switch (msg.messageType) {
 						case CommonValue.kWCMessageTypePlain:
+                            Log.i("tong test","CommonValue.kWCMessageTypePlain:");
 							holderLeftText = new ViewHolderLeftText();
 							convertView = inflater.inflate(R.layout.chat_left_text,null);
 							holderLeftText.timeTV = (TextView) convertView.findViewById(R.id.textview_time);
@@ -653,13 +707,15 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 				}
 			}
 			catch (Exception e) {
-				Logger.i(e);
+                Log.e("tong test", "error!", e);
 			}
 			return convertView;
 		}
 		
 		private void displayLeftText(JsonMessage msg, ViewHolderLeftText viewHolderLeftText, int position) {
-			imageLoader.displayImage(CommonValue.BASE_URL+ user.userHead, viewHolderLeftText.leftAvatar, options);
+            //Log.i("tong test", "displayLeftText viewHolderLeftText:" + viewHolderLeftText + "  user:" +user);
+            imageLoader.displayImage(CommonValue.BASE_URL+ user.userHead, viewHolderLeftText.leftAvatar, options);
+            //Log.i("tong test", "displayLeftText msg.text:" + msg.text + "  head:" + CommonValue.BASE_URL+ user.userHead);
 			viewHolderLeftText.leftText.setText(msg.text);
 			displayTime(position, viewHolderLeftText.timeTV);
 		}
@@ -1116,6 +1172,7 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 
 	@Override
 	public boolean onEditorAction(TextView view, int actionId, KeyEvent arg2) {
+        Log.i("tong test","onEditorAction , actionId:" + actionId);
 		switch (actionId) {
 		case EditorInfo.IME_ACTION_SEND:
 			String message = messageInput.getText().toString();

@@ -39,6 +39,7 @@ import android.widget.TextView;
 import config.CommonValue;
 import config.MessageManager;
 import config.XmppConnectionManager;
+import util.ThreadPool;
 
 /**
  * wechat
@@ -190,23 +191,29 @@ public class WeChat extends AWechatActivity {
 				wechatAdapter.notifyDataSetChanged();
 			}
 		};
-		ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-		singleThreadExecutor.execute(new Runnable() {
-			@Override
-			public void run() {
-				inviteNotices = MessageManager.getInstance(context).getRecentContactsWithLastMsg();
-				for (HistoryChatBean ch : inviteNotices) {
-					if (ch.getFrom().equals(notice.getFrom())) {
-						ch.setContent(notice.getContent());
-						ch.setNoticeTime(notice.getNoticeTime());
-						Integer x = ch.getNoticeSum() == null ? 0 : ch.getNoticeSum();
-						ch.setNoticeSum(x);
-					}
-				}
-				wechatAdapter.setNoticeList(inviteNotices);
-				handler.sendEmptyMessage(0);
-			}
-		});
+		//ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+		ThreadPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(300); //等待更新数据库
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                inviteNotices = MessageManager.getInstance(context).getRecentContactsWithLastMsg();
+                Log.i("tong test", this.getClass() + " msgReceive : " + inviteNotices);
+                for (HistoryChatBean ch : inviteNotices) {
+                    if (ch.getFrom().equals(notice.getFrom())) {
+                        ch.setContent(notice.getContent());
+                        ch.setNoticeTime(notice.getNoticeTime());
+                        Integer x = ch.getNoticeSum() == null ? 0 : ch.getNoticeSum();
+                        ch.setNoticeSum(x);
+                    }
+                }
+                wechatAdapter.setNoticeList(inviteNotices);
+                handler.sendEmptyMessage(0);
+            }
+        });
 	}
 	
 

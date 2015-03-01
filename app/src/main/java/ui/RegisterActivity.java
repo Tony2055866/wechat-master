@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,8 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
         mLearnLangEdit =  (TextView) findViewById(R.id.reg_learnLang);
         //mMotherLangEdit.setOnClickListener(this);
         //mLearnLangEdit.setOnClickListener(this);
-
+        LinearLayout ll = (LinearLayout)findViewById(R.id.reg_motherLangLayout);
+        
         mEmailEt = (EditText) findViewById(R.id.reg_email);
         mNameEt = (EditText) findViewById(R.id.reg_name);
         mPasswdEt = (EditText) findViewById(R.id.reg_password);
@@ -92,7 +94,7 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
 
     public void showLangOptions(View v) {
         Log.i("tong test", "showLangOptions v:" + v + "  ; id:" + v.getId());
-        final View view = v;
+       /* final View view = v;
         final String[] items = CommonValue.ITEMS;
         final boolean ischeckds[] = CommonValue.getCheckedByString(v.getTag().toString());
         
@@ -128,7 +130,7 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
                         }
                     }
                 }).setNegativeButton("取消", null)
-                .show();
+                .show();*/
     }
 
 
@@ -137,8 +139,12 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
         String accounts = mNameEt.getText().toString();
         String password = mPasswdEt.getText().toString();
         String email = mEmailEt.getText().toString();
-        String mMotherLang = Utils.join( ((List)mMotherLangEdit.getTag()).toArray(), ',');
-        String mLearnLang = Utils.join( ((List)mLearnLangEdit.getTag()).toArray(), ',');
+        String mMotherLang = "";
+            if(mMotherLangEdit.getTag() != null)
+                Utils.join( ((List)mMotherLangEdit.getTag()).toArray(), ',');
+        String mLearnLang = "";
+            if(mLearnLangEdit.getTag() != null)
+                Utils.join( ((List)mLearnLangEdit.getTag()).toArray(), ',');
         //String mLearnLang = mLearnLangEdit.getText().toString();
         final ProgressDialog dialog = UIHelper.showProgress(this, "注册", "提交数据中......", true);
         ApiClent.registerV2(appContext, email, password, accounts, mMotherLang, mLearnLang, new ApiClent.ClientCallback() {

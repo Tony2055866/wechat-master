@@ -40,6 +40,8 @@ public class CommonValue {
 
     public static boolean[] getCheckedByString(String currentSelected) {
         boolean res[] = new boolean[ITEMS.length];
+        if(currentSelected.trim().equals("") || currentSelected == null)
+            return res;
         String strArr[] = currentSelected.split(",");
         for(String str:strArr){
             res[ Integer.parseInt(str) ] = true;

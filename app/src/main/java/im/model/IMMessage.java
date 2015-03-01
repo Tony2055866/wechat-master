@@ -14,7 +14,7 @@ public class IMMessage implements Parcelable, Comparable<IMMessage> {
 	private String time;
 	private String fromSubJid;
 	private int msgType = 0;//0:接受 1：发送
-
+    
 	public IMMessage() {
 		this.type = SUCCESS;
 	}
@@ -113,4 +113,15 @@ public class IMMessage implements Parcelable, Comparable<IMMessage> {
 		time2 = oth.getTime();
 		return time1.compareTo(time2);
 	}
+
+    @Override
+    public String toString() {
+        return "IMMessage{" +
+                "type=" + type +
+                ", content='" + content + '\'' +
+                ", time='" + time + '\'' +
+                ", fromSubJid='" + fromSubJid + '\'' +
+                ", msgType=" + msgType +
+                '}';
+    }
 }

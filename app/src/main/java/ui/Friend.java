@@ -3,6 +3,7 @@
  */
 package ui;
 
+import config.FriendManager;
 import im.Chating;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import config.ApiClent;
 import config.AppActivity;
 import config.CommonValue;
 import config.ApiClent.ClientCallback;
+import util.ThreadPool;
 
 /**
  * wechat
@@ -138,7 +140,19 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
 		});
 	}
 	
-	private void handleFriends(StrangerEntity entity, int action) {
+	private void handleFriends(final StrangerEntity entity, int action) {
+        if(entity!= null && entity.userList != null && entity.userList.size() > 0){
+            ThreadPool.submit(new Runnable() {
+                @Override
+                public void run() {
+                    for(UserInfo friend:entity.userList){
+                        FriendManager.getInstance(context).saveOrUpdateFriend(friend);
+                    }
+                }
+            });
+        }
+        
+        
 		switch (action) {
 		case UIHelper.LISTVIEW_ACTION_INIT:
 		case UIHelper.LISTVIEW_ACTION_REFRESH:

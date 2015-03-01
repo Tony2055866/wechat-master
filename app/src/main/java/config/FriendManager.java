@@ -11,6 +11,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.util.Log;
+
+import java.util.List;
+
 import db.DBManager;
 import db.SQLiteTemplate;
 import db.SQLiteTemplate.RowMapper;
@@ -51,16 +55,19 @@ public class FriendManager {
 	 * @param user
 	 */
 	public void saveOrUpdateFriend(UserInfo user) {
+        Log.i("tong test","saveOrUpdateFriend! user:" + user);
+        
 		SQLiteTemplate st = SQLiteTemplate.getInstance(manager, false);
 		ContentValues contentValues = new ContentValues();
 		contentValues.put("nickName", user.nickName);
 		contentValues.put("avatar", user.userHead);
 		contentValues.put("description", user.description);
-		int s = st.update("im_friend", contentValues, "userId", new String[]{user.userId});
+		int s = st.update("im_friend", contentValues, " userId=? ", new String[]{user.userId});
 		if (s == 0) {
 			contentValues.put("userId", StringUtils.doEmpty(user.userId));
 			st.insert("im_friend", contentValues);
-		}
+            Log.i("tong test","saveOrUpdateFriend insert success! user:" + user);
+        }
 	}
 	
 	/**
@@ -87,4 +94,22 @@ public class FriendManager {
 		}, "select nickName, avatar, description from im_friend where userId=?", new String[]{userId});
 		return friend;
 	}
+
+    public List<UserInfo> getAllFriend() {
+        
+        SQLiteTemplate st = SQLiteTemplate.getInstance(manager, false);
+        
+        List list = st.queryForList(new RowMapper<UserInfo>() {
+            @Override
+            public UserInfo mapRow(Cursor cursor, int index) {
+                UserInfo user = new UserInfo();
+                user.userId = cursor.getString(cursor.getColumnIndex("userId"));
+                user.nickName = cursor.getString(cursor.getColumnIndex("nickName"));
+                user.userHead = cursor.getString(cursor.getColumnIndex("avatar"));
+                user.description = cursor.getString(cursor.getColumnIndex("description"));
+                return user;
+            }
+        }, "select userId,nickName, avatar, description from im_friend", new String[]{});
+        return list;
+    }
 }
