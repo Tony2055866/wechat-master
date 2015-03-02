@@ -32,9 +32,9 @@ import org.jivesoftware.smackx.search.UserSearch;
  * 
  */
 public class XmppConnectionManager {
-	final String XmppHost = CommonValue.host;
+	final static String XmppHost = "www.acmerblog.com";
 	final int XmppPort = 5222;
-	public static String BASE_XMPP_SERVER_NAME = "@"+ CommonValue.host;
+	public static String BASE_XMPP_SERVER_NAME = "@"+ XmppHost;
 	
 	private XMPPConnection connection;
 	private static ConnectionConfiguration connectionConfig;

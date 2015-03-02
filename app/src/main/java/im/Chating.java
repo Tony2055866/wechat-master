@@ -191,7 +191,7 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
             @Override
             public void afterTextChanged(Editable editable) {
                 //Log.i("tong test","afterTextChanged :" + editable.toString().trim());
-                if(editable.toString().trim().equals("")){
+                if(editable.toString().equals("")){
                     //Log.i("tong test","afterTextChanged :" + editable.toString().trim());
                     multiMediaButton.setVisibility(View.VISIBLE);
                     sendMessageButton.setVisibility(View.INVISIBLE);
@@ -1170,9 +1170,30 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
 		
 	}
 
+    public void sendClicked(View v){
+        String message = messageInput.getText().toString().trim();
+        if ("".equals(message)) {
+            Toast.makeText(Chating.this, "不能为空",
+                    Toast.LENGTH_SHORT).show();
+            messageInput.setText("");
+        } else {
+            try {
+                sendMessage(message);
+                messageInput.setText("");
+            } catch (Exception e) {
+                showToast("信息发送失败");
+                messageInput.setText(message);
+                e.printStackTrace();;
+                //Log.e("tong test","sendMessage error" ,e );
+            }
+            closeInput();
+        }
+        listView.setSelection(getMessages().size()-1);
+    }
+    
 	@Override
 	public boolean onEditorAction(TextView view, int actionId, KeyEvent arg2) {
-        Log.i("tong test","onEditorAction , actionId:" + actionId);
+        //Log.i("tong test","onEditorAction , actionId:" + actionId);
 		switch (actionId) {
 		case EditorInfo.IME_ACTION_SEND:
 			String message = messageInput.getText().toString();

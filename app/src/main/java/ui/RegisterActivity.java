@@ -60,6 +60,11 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
 
         mMotherLangEdit = (TextView) findViewById(R.id.reg_motherLang);
         mLearnLangEdit =  (TextView) findViewById(R.id.reg_learnLang);
+        
+        /*View reg_learnLangLayout = findViewById(R.id.reg_learnLangLayout);
+        View reg_motherLangLayout = findViewById(R.id.reg_motherLangLayout);
+        reg_learnLangLayout.setOnClickListener(this);
+        reg_motherLangLayout.setOnClickListener(this);*/
         //mMotherLangEdit.setOnClickListener(this);
         //mLearnLangEdit.setOnClickListener(this);
         LinearLayout ll = (LinearLayout)findViewById(R.id.reg_motherLangLayout);
@@ -81,22 +86,23 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
             case R.id.register_btn:
                 registered();
                 break;
-//            case R.id.reg_motherLang:
-//                showLangOptions();
+//            case R.id.reg_motherLangLayout:
+//                showLangOptions(v);
 //                break;
-//            case R.id.reg_learnLang:
-//                showLangOptions();
+//            case R.id.reg_learnLangLayout:
+//                showLangOptions(v);
             default:
                 break;
         }
     }
 
-
+    private String select1String = "", select2String = "";
     public void showLangOptions(View v) {
         Log.i("tong test", "showLangOptions v:" + v + "  ; id:" + v.getId());
-       /* final View view = v;
+        final View view = v;
         final String[] items = CommonValue.ITEMS;
-        final boolean ischeckds[] = CommonValue.getCheckedByString(v.getTag().toString());
+        String checkString = (v.getId() == R.id.reg_learnLangLayout ? select2String:select1String);
+        final boolean ischeckds[] = CommonValue.getCheckedByString(checkString );
         
         final List<String> selected = new ArrayList<String>(2);
         final List<Integer> selectedIndex = new ArrayList<Integer>(2);
@@ -120,17 +126,21 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
                         if (selected.size() > 0) {
                             res = Utils.join(selected.toArray(), ',');
                         }
+                        String selectedString = Utils.join(selectedIndex.toArray(), ',');
                         
                         if (view.getId() == R.id.reg_learnLangLayout) {
                             mLearnLangEdit.setText(res);
-                            mLearnLangEdit.setTag(selectedIndex);
+                            select2String = selectedString;
                         } else {
                             mMotherLangEdit.setText(res);
-                            mMotherLangEdit.setTag(selectedIndex);
+                            select1String = selectedString;
+//                            mMotherLangEdit.setTag(selectedIndex);
                         }
+                        
+                        Log.i("tong test", "showLangOptions mlang:" +select1String +"  ; lLang:" + select2String);
                     }
                 }).setNegativeButton("取消", null)
-                .show();*/
+                .show();
     }
 
 
@@ -139,15 +149,15 @@ public class RegisterActivity extends AppActivity implements View.OnClickListene
         String accounts = mNameEt.getText().toString();
         String password = mPasswdEt.getText().toString();
         String email = mEmailEt.getText().toString();
-        String mMotherLang = "";
+       /* String mMotherLang = "";
             if(mMotherLangEdit.getTag() != null)
                 Utils.join( ((List)mMotherLangEdit.getTag()).toArray(), ',');
         String mLearnLang = "";
             if(mLearnLangEdit.getTag() != null)
-                Utils.join( ((List)mLearnLangEdit.getTag()).toArray(), ',');
+                Utils.join( ((List)mLearnLangEdit.getTag()).toArray(), ',');*/
         //String mLearnLang = mLearnLangEdit.getText().toString();
         final ProgressDialog dialog = UIHelper.showProgress(this, "注册", "提交数据中......", true);
-        ApiClent.registerV2(appContext, email, password, accounts, mMotherLang, mLearnLang, new ApiClent.ClientCallback() {
+        ApiClent.registerV2(appContext, email, password, accounts, select1String, select2String, new ApiClent.ClientCallback() {
             @Override
             public void onSuccess(Object data) {
                 UIHelper.dismissProgress(dialog);
