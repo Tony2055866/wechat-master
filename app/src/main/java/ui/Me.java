@@ -53,7 +53,8 @@ import util.Utils;
 
 /**
  * wechat
- *
+ * 头像: more_headerview.xml
+ * 列表: des_cell.xml
  * @author gaotong
  *
  */
@@ -62,7 +63,7 @@ public class Me extends AppActivity{
 	private TextView nameTV;
 	private ListView iphoneTreeView;
 	private List<KeyValue> datas = new ArrayList<KeyValue>();
-	private FieldAdapter fieldAdapter;
+	private FieldAdapter fieldAdapter; //名字，签名等列表。。
     private UserEntity user = null;;
     
 	@Override
@@ -122,10 +123,7 @@ public class Me extends AppActivity{
 	public void ButtonClick(View v) {
 		switch (v.getId()) {
 		case R.id.exit:
-			XMPPConnection connection = XmppConnectionManager.getInstance().getConnection();
-			if (connection.isConnected()) {
-				connection.disconnect();
-			}
+			
 			stopService();
 			MessageManager.destroy();
 			NoticeManager.destroy();
@@ -133,6 +131,11 @@ public class Me extends AppActivity{
 			appContext.setUserLogout();
 			AppManager.getAppManager().finishAllActivity();
 			startActivity(new Intent(this, LoginActivity.class));
+            /*XMPPConnection connection = XmppConnectionManager.getInstance().getConnection();
+            if (connection.isConnected()) {
+                Log.d("tong test","XmppConnectionManager disconnect!!!");
+                connection.disconnect();
+            }*/
 			break;
 
 		default:

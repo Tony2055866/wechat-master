@@ -43,7 +43,7 @@ public class AppActivity extends BaseActivity implements AppActivitySupport{
 	protected NotificationManager notificationManager;
 
     //保存用户信息到本地
-    public void saveAccountToLocal(UserEntity user) {
+    /*public void saveAccountToLocal(UserEntity user) {
         SharedPreferences sp = this.getContext().getSharedPreferences(CommonValue.SHARED_PREFERENCE, MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("user", new Gson().toJson(user));
@@ -57,7 +57,7 @@ public class AppActivity extends BaseActivity implements AppActivitySupport{
             return new Gson().fromJson(jsonString, UserEntity.class);
         }
         return null;
-    }
+    }*/
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

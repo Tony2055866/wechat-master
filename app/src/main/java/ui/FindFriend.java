@@ -9,6 +9,7 @@ import java.util.List;
 import tools.UIHelper;
 import ui.adapter.StrangerAdapter;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,13 +44,14 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 	private List<UserInfo> datas;
 	private StrangerAdapter mAdapter;
 	private SwipeRefreshLayout swipeLayout;
-	
+	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.findfriend);
 		initUI();
 		getFriendCardFromCache();
+        progressDialog = UIHelper.showProgress(this,"提示","加载中...",true);
 	}
 	
 	private void initUI() {
@@ -79,6 +81,7 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 			@Override
 			public void onSuccess(Object data) {
 				StrangerEntity entity = (StrangerEntity)data;
+                UIHelper.dismissProgress(progressDialog);
 				switch (entity.status) {
 				case 1:
 					handleFriends(entity, action);
@@ -101,6 +104,7 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 	}
 	
 	private void handleFriends(StrangerEntity entity, int action) {
+        
 		switch (action) {
 		case UIHelper.LISTVIEW_ACTION_INIT:
 		case UIHelper.LISTVIEW_ACTION_REFRESH:

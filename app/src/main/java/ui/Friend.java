@@ -19,6 +19,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
@@ -109,13 +110,19 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
 	}
 	
 	private void getFriendCardFromCache() {
+       List<UserInfo> allFriend =  FriendManager.getInstance(this).getAllFriend();
+        StrangerEntity entity = new StrangerEntity();
+        entity.userList = allFriend;
+        handleFriends(entity, INIT_FRIENDS);
+        
 		currentPage = 1;
 		getMyFriend(currentPage, UIHelper.LISTVIEW_ACTION_REFRESH);
 	}
 	
 	private void getMyFriend(int page, final int action) {
 		String apiKey = appContext.getLoginApiKey();
-		ApiClent.getMyFriend(appContext, apiKey, page+"", UIHelper.LISTVIEW_COUNT+"", new ClientCallback() {
+        Log.d("tong test",this.getClass() + " getMyFriend: page=" + page + "  ;  action="+action + " apiKey:"+apiKey);
+        ApiClent.getMyFriend(appContext, apiKey, page+"", UIHelper.LISTVIEW_COUNT+"", new ClientCallback() {
 			@Override
 			public void onSuccess(Object data) {
 				StrangerEntity entity = (StrangerEntity)data;
@@ -140,8 +147,10 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
 		});
 	}
 	
+    public static final int INIT_FRIENDS = 1000;
 	private void handleFriends(final StrangerEntity entity, int action) {
-        if(entity!= null && entity.userList != null && entity.userList.size() > 0){
+        if(entity!= null && entity.userList != null && entity.userList.size() > 0
+                && action == UIHelper.LISTVIEW_ACTION_REFRESH){
             ThreadPool.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -152,7 +161,6 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
             });
         }
         
-        
 		switch (action) {
 		case UIHelper.LISTVIEW_ACTION_INIT:
 		case UIHelper.LISTVIEW_ACTION_REFRESH:
@@ -162,6 +170,11 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
 		case UIHelper.LISTVIEW_ACTION_SCROLL:
 			datas.addAll(entity.userList);
 			break;
+         case INIT_FRIENDS:
+              datas.clear();
+              datas.addAll(entity.userList);
+              break;
+                
 		}
 		if(entity.userList.size() == UIHelper.LISTVIEW_COUNT){					
 			lvDataState = UIHelper.LISTVIEW_DATA_MORE;
@@ -209,7 +222,8 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
 
 	@Override
 	public void onRefresh() {
-		if (lvDataState != UIHelper.LISTVIEW_DATA_LOADING) {
+        Log.d("tong test",this.getClass() + " onRefresh: lvDataState=" + lvDataState + "  ; ");
+        if (lvDataState != UIHelper.LISTVIEW_DATA_LOADING) {
 			lvDataState = UIHelper.LISTVIEW_DATA_LOADING;
 			currentPage = 1;
 			getMyFriend(currentPage, UIHelper.LISTVIEW_ACTION_REFRESH);

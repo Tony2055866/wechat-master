@@ -8,6 +8,7 @@ import org.apache.http.client.CookieStore;
 import bean.UserEntity;
 import bean.UserInfo;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.PersistentCookieStore;
 import com.nostra13.universalimageloader.utils.L;
 
@@ -24,6 +25,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 /**
  * wechat
@@ -37,8 +39,8 @@ public class WCApplication extends AppContext {
 	private NotificationManager mNotificationManager;
 	
 	private boolean login = false;	//登录状态
-	private String loginUid = "0";	//登录用户的id
-	private String apiKey = "0";	//登录用户的id
+	//private String loginUid = "0";	//登录用户的id
+	//private String apiKey = "0";	//登录用户的id
 	private UserEntity userEntity;
 	public synchronized static WCApplication getInstance() {
 		return mApplication;
@@ -49,6 +51,8 @@ public class WCApplication extends AppContext {
 			mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 		return mNotificationManager;
 	}
+
+    
 	
 	public void onCreate() {
 		mApplication = this;
@@ -83,21 +87,46 @@ public class WCApplication extends AppContext {
 	@SuppressWarnings("serial")
 	public void saveLoginInfo(final UserEntity user) {
         if(user != null){
-            this.loginUid = user.userInfo.userId;
-            this.apiKey = user.apiKey;
+            //this.loginUid = user.userInfo.userId;
+            //this.apiKey = user.apiKey;
             this.login = true;
             userEntity = user;
+            saveAccountToLocal(user);
         }else{
             login = false;
             userEntity = null;
-            apiKey = null;
-            loginUid = null;
+            //apiKey = null;
+            //loginUid = null;
+            clearAccountFromLocal();
         }
-                
-		
+        
 	}
-	
-	public void modifyLoginInfo(final UserInfo user) {
+
+    
+    private void clearAccountFromLocal() {
+        SharedPreferences sp = getSharedPreferences(CommonValue.SHARED_PREFERENCE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove("user");
+        editor.commit();
+    }
+
+    public void saveAccountToLocal(UserEntity user) {
+        SharedPreferences sp = getSharedPreferences(CommonValue.SHARED_PREFERENCE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("user", new Gson().toJson(user));
+        editor.commit();
+    }
+
+    public UserEntity getAccountFromLocal(){
+        SharedPreferences sp = getSharedPreferences(CommonValue.SHARED_PREFERENCE, MODE_PRIVATE);
+        String jsonString = sp.getString("user","");
+        if(jsonString != ""){
+            return new Gson().fromJson(jsonString, UserEntity.class);
+        }
+        return null;
+    }
+
+    public void modifyLoginInfo(final UserInfo user) {
 		setProperties(new Properties(){
 			{
 				if (StringUtils.notEmpty(user.nickName)) {
@@ -119,11 +148,11 @@ public class WCApplication extends AppContext {
 	 * @return
 	 */
 	public String getLoginUid() {
-		return loginUid;
+		return getLoginInfo().userInfo.userId;
 	}
 	
 	public String getLoginApiKey() {
-		return apiKey;
+		return getLoginInfo().apiKey;
 	}
 	
 	public String getLoginUserHead() {
@@ -134,7 +163,10 @@ public class WCApplication extends AppContext {
 	 * 获取登录信息
 	 * @return
 	 */
-	public UserEntity getLoginInfo() {		
+	public UserEntity getLoginInfo() {
+        if(this.userEntity == null){
+            return getAccountFromLocal();
+        }
         return this.userEntity;
 	}
 	
@@ -148,7 +180,7 @@ public class WCApplication extends AppContext {
 	public void setUserLogout() {
 		this.login = false;
         this.userEntity = null;
-
+        
 	}
 
 

@@ -30,6 +30,8 @@ public class DataBaseHelper extends SDCardSQLiteOpenHelper {
             db.execSQL("CREATE TABLE im_msg_his (_id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT, userId text, content text, msg_from text, msg_to text,msg_time TEXT, msg_type INTEGER);");
             db.execSQL("CREATE TABLE im_notice  (_id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT, userId text, type text, title text, content text, notice_from text, notice_to text, notice_time TEXT, status INTEGER);");
             db.execSQL("create table im_friend  (_id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT, userId text, nickName text, description text, avatar text);");
+            
+            db.execSQL("create table im_stranger  (_id INTEGER NOT NULL  PRIMARY KEY AUTOINCREMENT, userId text, nickName text, description text, avatar text,mLang text,lLang text);");
         }catch (Exception e){
             Log.e("tong test","DataBaseHelper onCreate error!", e);
         }

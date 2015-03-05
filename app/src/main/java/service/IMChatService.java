@@ -70,21 +70,26 @@ public class IMChatService extends Service {
 		return null;
 	}
 
+   
 	@Override
 	public void onDestroy() {
-//		XMPPConnection conn = XmppConnectionManager.getInstance()
-//				.getConnection();
-//		if (cListener != null) {
-//			conn.removePacketListener(cListener);
-//		}
+        Log.d("tong test",this.getClass() + " onDestroy !");
+		XMPPConnection conn = XmppConnectionManager.getInstance()
+				.getConnection();
+		if (cListener != null) {
+			conn.removePacketListener(cListener);
+		}
+        conn.disconnect();
 		super.onDestroy();
 	}
 
 	private void initChatManager() {
 		XMPPConnection conn = XmppConnectionManager.getInstance()
 				.getConnection();
-		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		cListener = new ChatListener();
+		//notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if(cListener != null)
+          conn.removePacketListener(cListener);
+        cListener = new ChatListener();
 		conn.addPacketListener(cListener, new MessageTypeFilter(
 				Message.Type.chat));
         /*ChatManager cm = XmppConnectionManager.getInstance().getConnection().getChatManager();
@@ -147,7 +152,7 @@ public class IMChatService extends Service {
 
 				noticeId = noticeManager.saveNotice(notice);
 				if (noticeId != -1) {
-                    Log.i("tong test","get message and: new Intent(CommonValue.NEW_MESSAGE_ACTION)");
+                    Log.i("tong test","get message and: new Intent(CommonValue.NEW_MESSAGE_ACTION)  newMessage:" +newMessage);
 					Intent intent = new Intent(CommonValue.NEW_MESSAGE_ACTION);
 					intent.putExtra(IMMessage.IMMESSAGE_KEY, msg);
 					intent.putExtra("notice", notice);

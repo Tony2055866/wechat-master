@@ -54,8 +54,8 @@ public class WeChat extends AWechatActivity {
 	private ImageView indicatorImageView;
 	private Animation indicatorAnimation;
 	
-	private List<HistoryChatBean> inviteNotices;
-	private WeChatAdapter wechatAdapter;
+	private List<HistoryChatBean> inviteNotices; // 所有的历史聊天
+	private WeChatAdapter wechatAdapter; //如何显示列表？
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +196,7 @@ public class WeChat extends AWechatActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(300); //等待更新数据库
+                    Thread.sleep(300); //等待更新数据库, 更新 是否 read
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

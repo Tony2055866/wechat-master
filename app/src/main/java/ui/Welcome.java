@@ -79,15 +79,15 @@ public class Welcome extends AppActivity{
         UserInfo user = FriendManager.getInstance(context).getFriend("sdfsdfsdf");
         Log.i("tong test", "welcome test user:" + user);*/
         
-        UserInfo info = FriendManager.getInstance(context).getFriend("402880814bd548a8014bd582b6030005");
+       /* UserInfo info = FriendManager.getInstance(context).getFriend("402880814bd548a8014bd582b6030005");
         Log.i("tong test","FriendManager.getInstance(context).getFriend():" + info);
         
       List<UserInfo> allUsers=  FriendManager.getInstance(context).getAllFriend();
-        Log.i("tong test","FriendManager.getInstance(context).getAllFriend():" + allUsers);
+        Log.i("tong test","FriendManager.getInstance(context).getAllFriend():" + allUsers);*/
     }
 	
 	private void redirectTo(){
-        UserEntity userEntity = getAccountFromLocal();
+        UserEntity userEntity = appContext.getAccountFromLocal();
         if(userEntity == null){
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);

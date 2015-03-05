@@ -13,9 +13,9 @@
 
     <string name="app_name">FF</string>
 
-    <string name="main_wechat">会话</string>
-    <string name="main_friend">通讯录</string>
-    <string name="main_find_friend">发现</string>
+    <string name="main_wechat">聊天</string>
+    <string name="main_friend">好友</string>
+    <string name="main_find_friend">推荐</string>
     <string name="main_me">我</string>
     
     <!-- 网络和内存卡提示 -->

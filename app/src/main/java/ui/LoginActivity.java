@@ -54,6 +54,12 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
         checkBox = (CheckBox)findViewById(R.id.auto_save_password);
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        isExit();
+    }
+
     /**
      * 处理点击事件
      */
@@ -101,13 +107,14 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
                         //登录成功
                         if (user.status == 1) {
                             appContext.saveLoginInfo(user);
-                            saveAccountToLocal(user);
+                            
                             //appContext.saveLoginPassword(password);
                             saveLoginConfig(appContext.getLoginInfo(), checkBox.isChecked() );
                             Intent intent = new Intent(LoginActivity.this, Tabbar.class);
                             startActivity(intent);
                             AppManager.getAppManager().finishActivity(LoginActivity.this);
                         }else{
+                            UIHelper.dismissProgress(loadingPd);
                             DialogFactory.ToastDialog(LoginActivity.this, "登录提示", user.msg);
                         }
                     }
@@ -116,12 +123,14 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
                     public void onFailure(String message) {
                         Log.e("tong test", "ApiClent.loginV2 fail! msg:" + message);
                         UIHelper.dismissProgress(loadingPd);
+                        DialogFactory.ToastDialog(LoginActivity.this, "登录提示", message);
                     }
 
                     @Override
                     public void onError(Exception e) {
                         Log.e("tong test", "ApiClent.loginV2 error!", e);
                         UIHelper.dismissProgress(loadingPd);
+                        DialogFactory.ToastDialog(LoginActivity.this, "登录提示", "网络出现异常");
                     }
                 });
 				/*SmackAndroid.init(LoginActivity.this);

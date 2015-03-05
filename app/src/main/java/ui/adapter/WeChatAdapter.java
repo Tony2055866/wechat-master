@@ -108,7 +108,7 @@ public class WeChatAdapter extends BaseAdapter {
     }
 
     private void getUserInfo(final String userId, final CellHolder holder, HistoryChatBean notice) {
-        Log.i("tong test",this.getClass() + " getUserInfo userId:" + userId);
+        Log.i("tong test",this.getClass() + " getUserInfo userId for display user's icon(other):" + userId);
 		holder.timeView.setText(DateUtil.wechat_time(notice.getNoticeTime()));
 		Integer ppCount = notice.getNoticeSum();
 		if (ppCount != null && ppCount > 0) {
@@ -127,6 +127,7 @@ public class WeChatAdapter extends BaseAdapter {
 		}
 		UserInfo friend = FriendManager.getInstance(context).getFriend(userId.split("@")[0]);
 		if (friend != null && StringUtils.notEmpty(friend.userHead)) {
+            Log.d("tong test","getUserInfo displayImage : " + CommonValue.BASE_URL+friend.userHead);
 			ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+friend.userHead, holder.avatarImageView, CommonValue.DisplayOptions.default_options);
 			holder.titleView.setText(friend.nickName);
 			return;
