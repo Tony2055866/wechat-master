@@ -178,17 +178,20 @@ public class Me extends AppActivity{
 			if(data == null)  return;
 			Uri thisUri = data.getData();
         	String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(thisUri);
+            Log.d("tong test","the iamge Path:" + thePath);
         	if(StringUtils.empty(thePath)) {
         		newPhotoPath = ImageUtils.getAbsoluteImagePath(this,thisUri);
         	}
         	else {
         		newPhotoPath = thePath;
         	}
+            
         	File file = new File(newPhotoPath);
 			File dir = new File( ImageUtils.CACHE_IMAGE_FILE_PATH);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
+            Log.d("tong test","newPhotoPath file:" + file.getAbsolutePath());
 			String imagePathAfterCompass = ImageUtils.CACHE_IMAGE_FILE_PATH + file.getName();
 			try {
 				ExifInterface sourceExif = new ExifInterface(newPhotoPath);
@@ -198,8 +201,10 @@ public class Me extends AppActivity{
 				exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientation);
 			    exif.saveAttributes();
 				newPhotoPath = imagePathAfterCompass;
+                Log.d("tong test","imagePathAfterCompass :" + imagePathAfterCompass);
 				uploadPhotoService(newPhotoPath);
 			} catch (IOException e) {
+                Log.e("tong test","save image error.", e);
 //				Crashlytics.logException(e);
 			}
 			break;
@@ -261,7 +266,7 @@ public class Me extends AppActivity{
 			public void onSuccess(Object data) {
 				UIHelper.dismissProgress(pg);
 				String head = (String) data;
-				modify("", head, "");
+				modify(null, head, null);
 			}
 			
 			@Override
@@ -335,7 +340,7 @@ public class Me extends AppActivity{
 				}
 				datas.set(0, new KeyValue("昵称", ed.getText().toString()));
 				fieldAdapter.notifyDataSetChanged();
-				modify(ed.getText().toString(), "", "");
+				modify(ed.getText().toString(), null, null);
 			}
 		});
 		builder.setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
@@ -363,7 +368,7 @@ public class Me extends AppActivity{
 				}
 				datas.set(1, new KeyValue("个性签名", ed.getText().toString()));
 				fieldAdapter.notifyDataSetChanged();
-				modify("", "", ed.getText().toString());
+				modify(null, null, ed.getText().toString());
 			}
 		});
 		builder.setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {

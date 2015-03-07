@@ -58,7 +58,7 @@
                 style="@style/regist_editText"
                 android:id="@+id/reg_email"
                 android:hint="请输入邮箱"
-                android:text="gaotong1@test.com"
+                android:text=""
                 android:inputType="textEmailAddress"
                  />
 
@@ -81,7 +81,7 @@
             <EditText
                 android:id="@+id/reg_name"
                 style="@style/regist_editText"
-                android:text="高通1"
+                android:text=""
                 android:hint="请输入用户名"/>
 
         </LinearLayout>
@@ -107,7 +107,7 @@
                 style="@style/regist_editText"
                 android:hint="请输入密码"
                 android:inputType="textPassword"
-                android:text="19902055"
+                android:text=""
                  />
 
         </LinearLayout>
@@ -131,7 +131,7 @@
                 android:id="@+id/reg_password2"
                 style="@style/regist_editText"
                 android:hint="请再次输入密码"
-                android:text="19902055"
+                android:text=""
                 android:inputType="textPassword"
                 />
         </LinearLayout>

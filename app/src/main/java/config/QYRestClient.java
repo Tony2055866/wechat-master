@@ -2,6 +2,7 @@ package config;
 
 import android.content.Context;
 
+import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -39,6 +40,7 @@ public class QYRestClient {
 	  private static String getAbsoluteUrl(String relativeUrl) {
 		  client.setTimeout(10*1000);
 		  client.setMaxConnections(5);
-	      return CommonValue.BASE_API + relativeUrl;
+          Log.d("tong test","getAbsoluteUrl :" + CommonValue.BASE_API + relativeUrl);
+          return CommonValue.BASE_API + relativeUrl;
 	  }
 }

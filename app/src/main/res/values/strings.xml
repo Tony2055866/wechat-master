@@ -7,11 +7,11 @@
     <string name="password_not_empty">密码不能为空</string>
     <string name="login_success">登录成功</string>
     <string name="sc_login_failed">登录失败</string>
-    <string name="qr_register">FF注册</string>
-    <string name="register_tip">提示 \n带*项为必填项\n填写邮箱方便您找回密码以及了解更多FF信息</string>
+    <string name="qr_register">Find Me注册</string>
+    <string name="register_tip">提示 \n带*项为必填项\n填写邮箱方便您找回密码以及了解更多Find Me信息</string>
 
 
-    <string name="app_name">FF</string>
+    <string name="app_name">Find Me</string>
 
     <string name="main_wechat">聊天</string>
     <string name="main_friend">好友</string>

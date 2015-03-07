@@ -3,6 +3,8 @@ package ui.adapter;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import android.view.Gravity;
+import android.widget.*;
 import tools.StringUtils;
 import ui.FindFriend;
 import ui.Friend;
@@ -20,10 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class StrangerAdapter extends BaseAdapter {
 	private Context context;
@@ -60,33 +58,43 @@ public class StrangerAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup arg2) {
-		CellHolder cell = null;
-		if (convertView == null) {
-			cell = new CellHolder();
-			convertView = inflater.inflate(R.layout.friend_card_cell, null);
-			cell.alpha = (TextView) convertView.findViewById(R.id.alpha);
-			cell.avatarImageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
-			cell.titleView = (TextView) convertView.findViewById(R.id.title);
-			cell.desView = (TextView) convertView.findViewById(R.id.des);
-			convertView.setTag(cell);
-		}
-		else {
-			cell = (CellHolder) convertView.getTag();
-		}
-		final UserInfo model = cards.get(position);
-		ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+model.userHead, cell.avatarImageView, CommonValue.DisplayOptions.default_options);
-		cell.titleView.setText(model.nickName);
-        //model.mLang;
-		cell.desView.setText("母语："+ CommonValue.getLangStrings(model.mLang) );
-		cell.alpha.setVisibility(View.GONE);
-		convertView.setOnClickListener( new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				
-				((FindFriend)context).show2OptionsDialog(new String[]{CommonValue.Operation.addFriend}, model);
-			}
-		});
-		return convertView;
+        final UserInfo model = cards.get(position);
+        if(model != null && !model.userId.equals("empty")){
+            CellHolder cell = null;
+            if (convertView == null) {
+                cell = new CellHolder();
+                convertView = inflater.inflate(R.layout.friend_card_cell, null);
+                cell.alpha = (TextView) convertView.findViewById(R.id.alpha);
+                cell.avatarImageView = (ImageView) convertView.findViewById(R.id.avatarImageView);
+                cell.titleView = (TextView) convertView.findViewById(R.id.title);
+                cell.desView = (TextView) convertView.findViewById(R.id.des);
+                convertView.setTag(cell);
+            }
+            else {
+                cell = (CellHolder) convertView.getTag();
+            }
+            ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+model.userHead, cell.avatarImageView, CommonValue.DisplayOptions.default_options);
+            cell.titleView.setText(model.nickName);
+            //model.mLang;
+            cell.desView.setText("母语："+ CommonValue.getLangStrings(model.mLang) );
+            cell.alpha.setVisibility(View.GONE);
+            convertView.setOnClickListener( new OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+
+                    ((FindFriend)context).show2OptionsDialog(new String[]{CommonValue.Operation.addFriend}, model);
+                }
+            });
+            return convertView;
+        }else{
+            TextView textView = new TextView(context);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            textView.setPadding(30,30,30,30);
+            textView.setTextSize(16);
+            textView.setText("暂无可推荐的小伙伴");
+            return textView;
+        }
+		
 	}
 	
 }

@@ -356,13 +356,13 @@ public class ApiClent {
 	public static void modifiedUser(final WCApplication appContext, String apiKey, String nickname, String head, String des, final ClientCallback callback) {
 		RequestParams params = new RequestParams();
 		params.add("apiKey", apiKey);
-		if (StringUtils.notEmpty(nickname)) {
+		if (nickname != null) {
 			params.add("nickName", nickname);
 		}
-		if (StringUtils.notEmpty(head)) {
+		if (head != null) {
 			params.add("userHead", head);
 		}
-		if (StringUtils.notEmpty(des)) {
+		if (des != null) {
 			params.add("description", des);
 		}
 		QYRestClient.post("modUserInfo.do", params, new AsyncHttpResponseHandler() {
@@ -410,6 +410,7 @@ public class ApiClent {
         if (StringUtils.notEmpty(userInfo.description)) {
             params.add("description", userInfo.description);
         }
+        
         params.add("mLang", userInfo.mLang);
         params.add("lLang", userInfo.lLang);
         

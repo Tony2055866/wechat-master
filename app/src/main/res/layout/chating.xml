@@ -113,7 +113,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:visibility="invisible"
+            android:visibility="visible"
              />
         <Button android:id="@+id/sendMessageButton"
             android:layout_centerVertical="true"

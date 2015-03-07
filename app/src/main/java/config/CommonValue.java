@@ -22,7 +22,9 @@ import util.Utils;
  */
 public class CommonValue {
 	public static String PackageName = "com.donal.wechat";
-    public static String host = "192.168.1.101";
+    //public static String host = "192.168.1.101";
+    public static String host = "192.168.31.135";
+    
 	public static String BASE_API = "http://"+host+":8080/wechat/api/";
 	public static String BASE_URL = "http://"+host+":8080/wechat/";
 

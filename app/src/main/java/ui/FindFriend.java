@@ -6,6 +6,9 @@ package ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import tools.UIHelper;
 import ui.adapter.StrangerAdapter;
 import android.app.AlertDialog;
@@ -35,6 +38,8 @@ import config.ApiClent.ClientCallback;
  * @author gaotong
  *
  */
+
+
 public class FindFriend extends AppActivity implements OnScrollListener, OnRefreshListener{
 	
 	private int lvDataState;
@@ -44,14 +49,21 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 	private List<UserInfo> datas;
 	private StrangerAdapter mAdapter;
 	private SwipeRefreshLayout swipeLayout;
-	private ProgressDialog progressDialog;
+   // public TextView noRecommdText;
+	//private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.findfriend);
 		initUI();
 		getFriendCardFromCache();
-        progressDialog = UIHelper.showProgress(this,"提示","加载中...",true);
+        swipeLayout.post(new Runnable() {
+            @Override public void run() {
+                swipeLayout.setRefreshing(true);
+            }
+        });
+       
+        //progressDialog = UIHelper.showProgress(this,"提示","加载中...",true);
 	}
 	
 	private void initUI() {
@@ -67,7 +79,7 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
         datas = new ArrayList<UserInfo>();
 		mAdapter = new StrangerAdapter(this, datas);
 		xlistView.setAdapter(mAdapter);
-		
+//        noRecommdText = (TextView) findViewById(R.id.noRecommdText);
 	}
 	
 	private void getFriendCardFromCache() {
@@ -76,12 +88,15 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 	}
 	
 	private void findFriend(int page, String nickName, final int action) {
+        Log.d("tong test",this.getClass() + ". findFriend");
+     //   noRecommdText.setVisibility(View.GONE);
+        
 		String apiKey = appContext.getLoginApiKey();
 		ApiClent.findFriend(appContext, apiKey, page+"", UIHelper.LISTVIEW_COUNT+"", nickName, new ClientCallback() {
 			@Override
 			public void onSuccess(Object data) {
 				StrangerEntity entity = (StrangerEntity)data;
-                UIHelper.dismissProgress(progressDialog);
+                //UIHelper.dismissProgress(progressDialog);
 				switch (entity.status) {
 				case 1:
 					handleFriends(entity, action);
@@ -115,6 +130,7 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 			datas.addAll(entity.userList);
 			break;
 		}
+        
 		if(entity.userList.size() == UIHelper.LISTVIEW_COUNT){					
 			lvDataState = UIHelper.LISTVIEW_DATA_MORE;
 			mAdapter.notifyDataSetChanged();
@@ -123,9 +139,18 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 			lvDataState = UIHelper.LISTVIEW_DATA_FULL;
 			mAdapter.notifyDataSetChanged();
 		}
+        Log.d("tong test",this.getClass() + ". handleFriends datas :" + datas);
 		if(datas.isEmpty()){
+            //空的时候，提示用户无推荐的用户
+            //noRecommdText.setVisibility(View.VISIBLE);
 			lvDataState = UIHelper.LISTVIEW_DATA_EMPTY;
-		}
+            UserInfo u = new UserInfo();
+            u.userId = "empty";
+            datas.add(u);
+            mAdapter.notifyDataSetChanged();
+		}else{
+            //noRecommdText.setVisibility(View.GONE);
+        }
 		swipeLayout.setRefreshing(false);
 	}
 
@@ -189,6 +214,8 @@ public class FindFriend extends AppActivity implements OnScrollListener, OnRefre
 
 	@Override
 	public void onRefresh() {
+        
+        Log.d("tong test",this.getClass() + ". onRefresh");
 		if (lvDataState != UIHelper.LISTVIEW_DATA_LOADING) {
 			lvDataState = UIHelper.LISTVIEW_DATA_LOADING;
 			currentPage = 1;
