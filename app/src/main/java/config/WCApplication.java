@@ -3,6 +3,7 @@ package config;
 import java.util.List;
 import java.util.Properties;
 
+import android.util.Log;
 import org.apache.http.client.CookieStore;
 
 import bean.UserEntity;
@@ -13,6 +14,8 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.nostra13.universalimageloader.utils.L;
 
 
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.Presence;
 import tools.AppContext;
 import tools.AppException;
 import tools.AppManager;
@@ -69,6 +72,28 @@ public class WCApplication extends AppContext {
         intent.setAction("tools.NetworkState.Service");
         startService(intent);
 	}
+
+    public void reConnAndLogin() {
+        Log.i("tong test", this.getClass() + "   reConnAndLogin");
+        try {
+            String password = getLoginInfo().userInfo.password;
+            String userId = getLoginUid();
+            XMPPConnection connection = XmppConnectionManager.getInstance()
+                    .getConnection();
+            if(!connection.isConnected())
+                connection.connect();
+            if(StringUtils.notEmpty(userId) && StringUtils.notEmpty(password)){
+                if(!connection.isAuthenticated()){
+                    connection.login(userId, password, "android"); //
+                    connection.sendPacket(new Presence(Presence.Type.available));
+                    Log.i("tong test", "XMPPClient reConnAndLogin in as: " + connection.getUser() + " password:" + password);
+                }
+            } 
+        }catch (Exception e){
+            Log.e("tong test","reConnAndLogin error!", e);
+        }
+        
+    }
 	
 	public void exit() {
 //		XmppConnectionManager.getInstance().disconnect();
@@ -127,20 +152,11 @@ public class WCApplication extends AppContext {
     }
 
     public void modifyLoginInfo(final UserInfo user) {
-		setProperties(new Properties(){
-			{
-				if (StringUtils.notEmpty(user.nickName)) {
-                    userEntity.userInfo.nickName = user.nickName;
-				}
-				if (StringUtils.notEmpty(user.userHead)) {
-                    userEntity.userInfo.userHead = user.userHead;
-				}
-				if (StringUtils.notEmpty(user.description)) {
-                    userEntity.userInfo.description = user.description;
-				}
-				
-			}
-		});		
+		UserEntity entity = getLoginInfo();
+        if(entity != null){
+            entity.userInfo = user;
+            saveAccountToLocal(entity);
+        }
 	}
 
 	/**
@@ -156,7 +172,8 @@ public class WCApplication extends AppContext {
 	}
 	
 	public String getLoginUserHead() {
-		return userEntity.userInfo.userHead;
+       return getLoginInfo().userInfo.userHead;
+		//return userEntity.userInfo.userHead;
 	}
 	
 	/**
@@ -165,7 +182,7 @@ public class WCApplication extends AppContext {
 	 */
 	public UserEntity getLoginInfo() {
         if(this.userEntity == null){
-            return getAccountFromLocal();
+            return this.userEntity = getAccountFromLocal();
         }
         return this.userEntity;
 	}

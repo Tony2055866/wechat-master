@@ -30,9 +30,7 @@ public class MessageManager {
 	private static DBManager manager = null;
 
 	private MessageManager(Context context) {
-		SharedPreferences sharedPre = context.getSharedPreferences(
-				CommonValue.LOGIN_SET, Context.MODE_PRIVATE);
-		String databaseName = sharedPre.getString(CommonValue.USERID, null);
+        String databaseName = ((AppActivity)context).appContext.getLoginUid();
 		Logger.i(databaseName);
 		manager = DBManager.getInstance(context, databaseName);
 	}

@@ -1,5 +1,10 @@
 package service;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import config.*;
 import im.Chating;
 import im.model.IMMessage;
 import im.model.Notice;
@@ -21,11 +26,6 @@ import bean.JsonMessage;
 
 import com.donal.wechat.R;
 import com.google.gson.Gson;
-
-import config.CommonValue;
-import config.MessageManager;
-import config.NoticeManager;
-import config.XmppConnectionManager;
 
 import tools.DateUtil;
 import tools.Logger;
@@ -49,15 +49,19 @@ public class IMChatService extends Service {
 	private Context context;
 	private NotificationManager notificationManager;
 	private ChatListener cListener;
-
+    ConnectionChangeReceiver receiver = new ConnectionChangeReceiver();
+    public static boolean CHECK_CONN = true;
 	@Override
 	public void onCreate() {
 		context = this;
-		Logger.i("c");
+		Log.d("tong test", "IMChatService onCreate");
 		super.onCreate();
-		
 		initChatManager();
-	}
+        
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiver, filter);
+    }
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -73,6 +77,7 @@ public class IMChatService extends Service {
    
 	@Override
 	public void onDestroy() {
+        CHECK_CONN = false;
         Log.d("tong test",this.getClass() + " onDestroy !");
 		XMPPConnection conn = XmppConnectionManager.getInstance()
 				.getConnection();
@@ -80,13 +85,15 @@ public class IMChatService extends Service {
 			conn.removePacketListener(cListener);
 		}
         conn.disconnect();
+        
+        unregisterReceiver(receiver);
 		super.onDestroy();
 	}
 
 	private void initChatManager() {
 		XMPPConnection conn = XmppConnectionManager.getInstance()
 				.getConnection();
-		//notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if(cListener != null)
           conn.removePacketListener(cListener);
         cListener = new ChatListener();
@@ -186,4 +193,38 @@ public class IMChatService extends Service {
 		myNoti.setLatestEventInfo(this, contentTitle, msg.text, appIntent);
 		notificationManager.notify(0, myNoti);
 	}
+
+    public class ConnectionChangeReceiver  extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("tong test", "网络状态改变");
+            boolean success = false;
+            //获得网络连接服务
+            ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            // 获取WIFI网络连接状态  
+            NetworkInfo.State state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+            // 判断是否正在使用WIFI网络   
+            if (NetworkInfo.State.CONNECTED == state) {
+                success = true;
+            }else{
+                // 获取GPRS网络连接状态   
+                state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+                // 判断是否正在使用GPRS网络   
+                if (NetworkInfo.State.CONNECTED == state) {
+                    success = true;
+                    return;
+                }
+            }
+            
+            if(success){
+                 ((AppActivity)context).appContext.reConnAndLogin();
+            }
+/*
+        if (!success) {
+            Toast.makeText(context, "ddd", Toast.LENGTH_LONG).show();
+        }*/
+        }
+
+    }
 }

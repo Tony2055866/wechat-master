@@ -3,6 +3,7 @@
  */
 package im;
 
+import config.XmppConnectionManager;
 import im.model.IMMessage;
 import im.model.Notice;
 
@@ -13,6 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.Presence;
 import org.json.JSONObject;
 
 import qiniu.auth.JSONObjectRet;
@@ -1181,17 +1184,24 @@ public class Chating extends AChating implements OnTouchListener, OnItemClickLis
                 sendMessage(message);
                 messageInput.setText("");
             } catch (Exception e) {
-                showToast("信息发送失败");
-                messageInput.setText(message);
-                e.printStackTrace();;
-                //Log.e("tong test","sendMessage error" ,e );
+                //showToast("信息发送失败");
+                try {
+                    reLogin();
+                    messageInput.setText(message);
+                } catch (Exception e1) {
+                    Log.e("tong test","sendMessage error, second time" ,e );
+                }
+                
+                Log.e("tong test","sendMessage error, first time" ,e );
             }
             closeInput();
         }
         listView.setSelection(getMessages().size()-1);
     }
+
     
-	@Override
+
+    @Override
 	public boolean onEditorAction(TextView view, int actionId, KeyEvent arg2) {
         //Log.i("tong test","onEditorAction , actionId:" + actionId);
 		switch (actionId) {

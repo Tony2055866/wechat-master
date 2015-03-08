@@ -150,7 +150,7 @@ public class Friend extends AppActivity implements OnScrollListener, OnRefreshLi
     public static final int INIT_FRIENDS = 1000;
 	private void handleFriends(final StrangerEntity entity, int action) {
         if(entity!= null && entity.userList != null && entity.userList.size() > 0
-                && action == UIHelper.LISTVIEW_ACTION_REFRESH){
+                && action == UIHelper.LISTVIEW_ACTION_REFRESH && appContext.getLoginUid() != null){
             ThreadPool.submit(new Runnable() {
                 @Override
                 public void run() {

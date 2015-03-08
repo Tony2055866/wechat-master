@@ -100,6 +100,7 @@ public abstract class SDCardSQLiteOpenHelper {
 				db = SQLiteDatabase.create(null);
 			} else {
 				String path = getDatabasePath(mName).getPath();
+                //Log.d("tong test","getDatabasePath : " + path);
 				db = SQLiteDatabase.openOrCreateDatabase(path, mFactory);
 			}
 

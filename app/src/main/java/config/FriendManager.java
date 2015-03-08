@@ -30,9 +30,9 @@ public class FriendManager {
 	private static DBManager manager = null;
 	
 	private FriendManager(Context context) {
-		SharedPreferences sharedPre = context.getSharedPreferences(
-				CommonValue.LOGIN_SET, Context.MODE_PRIVATE);
-		String databaseName = sharedPre.getString(CommonValue.USERID, null);
+		
+		String databaseName = ((AppActivity)context).appContext.getLoginUid();
+        Log.d("tong test","FriendManager open database : " + databaseName);
 		Logger.i(databaseName);
 		manager = DBManager.getInstance(context, databaseName);
 	}
@@ -96,7 +96,6 @@ public class FriendManager {
 	}
 
     public List<UserInfo> getAllFriend() {
-        
         SQLiteTemplate st = SQLiteTemplate.getInstance(manager, false);
         
         List list = st.queryForList(new RowMapper<UserInfo>() {
@@ -110,6 +109,7 @@ public class FriendManager {
                 return user;
             }
         }, "select userId,nickName, avatar, description from im_friend", new String[]{});
+        Log.d("tong test",this.getClass() + "getAllFriend : " + list);
         return list;
     }
 }

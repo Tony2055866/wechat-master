@@ -147,32 +147,38 @@ public class WeChat extends AWechatActivity {
 		new Thread(new Runnable() {				
 			@Override
 			public void run() {
-				Message msg = new Message();
-                Log.i("tong test","connect , getLoginInfo : " + appContext.getLoginInfo());
-				try {
-					String password = appContext.getLoginInfo().userInfo.password;
-					String userId = appContext.getLoginUid();
-					XMPPConnection connection = XmppConnectionManager.getInstance()
-							.getConnection();
-					connection.connect();
-					connection.login(userId, password, "android"); //
-					connection.sendPacket(new Presence(Presence.Type.available));
-					Log.i("tong test","XMPPClient Logged in as: " + connection.getUser() + " password:" + password);
-					msg.what = 1;
-				} catch (Exception xee) {
-                    Log.e("tong test","connect2xmpp error!",  xee);
-					if (xee instanceof XMPPException) {
-						XMPPException xe = (XMPPException) xee;
-						final XMPPError error = xe.getXMPPError();
-						int errorCode = 0;
-						if (error != null) {
-							errorCode = error.getCode();
-						}
-						msg.what = errorCode;
-						msg.obj = xee;
-					}
-					
-				}	
+                Message msg = new Message();
+                for(int i=0; i<=3; i++){
+                    Log.i("tong test","connect , getLoginInfo : " + appContext.getLoginInfo());
+                    try {
+                        String password = appContext.getLoginInfo().userInfo.password;
+                        String userId = appContext.getLoginUid();
+                        XMPPConnection connection = XmppConnectionManager.getInstance()
+                                .getConnection();
+                        if(connection.isConnected())
+                            connection.disconnect();
+                        connection.connect();
+                        connection.login(userId, password, "android"); //
+                        connection.sendPacket(new Presence(Presence.Type.available));
+                        Log.i("tong test","XMPPClient Logged in as: " + connection.getUser() + " password:" + password);
+                        msg.what = 1;
+                        break; //成功则break
+                    } catch (Exception xee) {
+                        Log.e("tong test","connect2xmpp error!",  xee);
+                        if (xee instanceof XMPPException) {
+                            XMPPException xe = (XMPPException) xee;
+                            final XMPPError error = xe.getXMPPError();
+                            int errorCode = 0;
+                            if (error != null) {
+                                errorCode = error.getCode();
+                            }
+                            Log.d("tong test","connect2xmpp error code : " + error.getCode());
+                            msg.what = errorCode;
+                            msg.obj = xee;
+                        }
+                    }
+                }
+				
 				handler.sendMessage(msg);
 			}
 		}).start();

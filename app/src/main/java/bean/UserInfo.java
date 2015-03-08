@@ -26,6 +26,9 @@ public class UserInfo implements Serializable {
 	public String nickName;
     public String password;
     
+    public String myid;
+    
+    
 	/**
 	 * @param string
 	 * @return

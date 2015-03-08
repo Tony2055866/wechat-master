@@ -107,7 +107,6 @@ public class LoginActivity extends AppActivity implements View.OnClickListener {
                         //登录成功
                         if (user.status == 1) {
                             appContext.saveLoginInfo(user);
-                            
                             //appContext.saveLoginPassword(password);
                             saveLoginConfig(appContext.getLoginInfo(), checkBox.isChecked() );
                             Intent intent = new Intent(LoginActivity.this, Tabbar.class);

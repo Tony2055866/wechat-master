@@ -17,6 +17,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
 import org.json.JSONObject;
 
 import qiniu.auth.JSONObjectRet;
@@ -81,6 +82,16 @@ public abstract class AChating extends AppActivity{
         XMPPConnection connection = XmppConnectionManager.getInstance().getConnection();
 		chat = connection.getChatManager().createChat(to, null);
 	}
+
+    public void reLogin() throws Exception{
+        
+        appContext.reConnAndLogin();
+        XMPPConnection connection = XmppConnectionManager.getInstance().getConnection();
+        if(connection.isConnected() && to != null)
+            chat = connection.getChatManager().createChat(to, null);
+        else
+            Log.e("tong test","to is null or connection error!!",new Exception("to is null!!"));
+    }
 	
 	@Override
 	protected void onPause() {

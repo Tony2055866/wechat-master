@@ -26,9 +26,7 @@ public class NoticeManager {
 	private static DBManager manager = null;
 
 	private NoticeManager(Context context) {
-		SharedPreferences sharedPre = context.getSharedPreferences(
-				CommonValue.LOGIN_SET, Context.MODE_PRIVATE);
-		String databaseName = sharedPre.getString(CommonValue.USERID, null);
+        String databaseName = ((AppActivity)context).appContext.getLoginUid();
 		manager = DBManager.getInstance(context, databaseName);
 	}
 

@@ -1,5 +1,6 @@
 package ui.adapter;
 
+import im.WeChat;
 import im.model.HistoryChatBean;
 
 import java.util.List;
@@ -118,7 +119,7 @@ public class WeChatAdapter extends BaseAdapter {
 			holder.paopao.setVisibility(View.GONE);
 		}
 		
-		String content = notice.getContent();
+		final String content = notice.getContent();
 		try {
 			JsonMessage msg = JsonMessage.parse(content);
 			holder.desView.setText(msg.text);
@@ -126,10 +127,14 @@ public class WeChatAdapter extends BaseAdapter {
 			holder.desView.setText(content);
 		}
 		UserInfo friend = FriendManager.getInstance(context).getFriend(userId.split("@")[0]);
-		if (friend != null && StringUtils.notEmpty(friend.userHead)) {
+		if (friend != null ) {
             Log.d("tong test","getUserInfo displayImage : " + CommonValue.BASE_URL+friend.userHead);
-			ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+friend.userHead, holder.avatarImageView, CommonValue.DisplayOptions.default_options);
-			holder.titleView.setText(friend.nickName);
+            if(StringUtils.notEmpty(friend.userHead))
+			    ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+friend.userHead, holder.avatarImageView, CommonValue.DisplayOptions.default_options);
+			else
+                ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+friend.userHead, holder.avatarImageView, CommonValue.DisplayOptions.default_options);
+
+            holder.titleView.setText(friend.nickName);
 			return;
 		}
 		SharedPreferences sharedPre = context.getSharedPreferences(
@@ -141,7 +146,10 @@ public class WeChatAdapter extends BaseAdapter {
 			@Override
 			public void onSuccess(Object data) {
 				UserDetail userInfo = (UserDetail) data;
-				FriendManager.getInstance(context).saveOrUpdateFriend(userInfo.userDetail);
+//                String myid = ((WeChat)context).appContext.getLoginUid();
+//                if(myid != null)
+                Log.d("tong test","get user info from server : " + userInfo);
+				    FriendManager.getInstance(context).saveOrUpdateFriend(userInfo.userDetail);
 				holder.titleView.setText(userInfo.userDetail.nickName);
 				ImageLoader.getInstance().displayImage(CommonValue.BASE_URL+userInfo.userDetail.userHead, holder.avatarImageView, CommonValue.DisplayOptions.default_options);
 			}
